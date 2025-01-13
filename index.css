@@ -135,77 +135,123 @@ a:hover, button:hover {
 
 /* Print on single page */
 @media print {
-    /* Reset page margins for printing */
+    /* Remove all margins for the page */
     body {
         margin: 0;
         padding: 0;
-        font-size: 12px; /* Adjust font size for print */
     }
 
+    /* Ensure the container fits onto one page */
     .container {
-        display: block;
         width: 100%;
-        height: auto;
+        max-width: 100%;
+        min-height: 100vh;
+        flex-wrap: nowrap;
         box-shadow: none; /* Remove box shadow for printing */
+        display: flex;
+        flex-direction: row;
     }
 
-    .leftPanel, .rightPanel {
-        width: 100%;
+    /* Left panel adjustments */
+    .leftPanel {
+        width: 30%;
+        background-color: #2e3b4e;
+        color: white;
         padding: 10px;
         box-sizing: border-box;
+        float: left;
     }
 
+    /* Right panel adjustments */
     .rightPanel {
-        margin-top: 20px;
+        width: 70%;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        float: left;
     }
 
-    h1, h2, h3 {
-        page-break-before: auto; /* Prevent heading from breaking */
-    }
-
+    /* Reduce font size to fit content */
     h1 {
-        font-size: 2em; /* Adjust header size for print */
+        font-size: 2em; /* Adjust if necessary */
     }
 
     h2 {
         font-size: 1.5em;
     }
 
-    .website a {
-        color: black;
-        text-decoration: none; /* Ensure links are visible when printed */
+    h3 {
+        font-size: 1.25em;
     }
 
-    .website a:hover {
+    /* Adjust spacing in work experience section */
+    ul {
+        padding-left: 10px;
+        list-style-type: disc;
+    }
+
+    li {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    /* Contact information and skill list styles */
+    .contactIcon {
+        display: inline-block;
+        width: 1em;
+        text-align: center;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    /* Skill list adjustments */
+    .skill-list li {
+        background-color: #2e3b4e;
+        color: white;
+        padding: 5px 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+    }
+
+    /* Ensure content fits on a single page */
+    .rightPanel {
+        page-break-after: avoid; /* Prevent page breaks */
+    }
+
+    .leftPanel, .rightPanel {
+        width: 50%;
+        float: left;
+    }
+
+    /* Ensure all job positions are styled correctly */
+    .jobPosition {
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    /* Avoid large breaks between sections */
+    .bottomLineSeparator {
+        border-bottom: 1px solid white;
+        margin-bottom: 20px;
+        padding-bottom: 1px;
+    }
+
+    /* Remove background from elements for printing */
+    .leftPanel {
+        background-color: white; /* Remove background for print */
+    }
+
+    /* Print only the essential links */
+    .website a {
+        color: black; /* Ensure links are black for printing */
         text-decoration: none;
     }
 
-    /* Remove background color from the left panel for printing */
-    .leftPanel {
-        background-color: white;
-    }
-
-    .skill-list li, .education-details, .indented {
-        font-size: 12px; /* Adjust font size for smaller text */
-    }
-
-    .jobPosition {
-        font-size: 14px;
-        page-break-inside: avoid; /* Prevent page break inside job entries */
-    }
-
-    /* Prevent breaking on long sections */
-    .workExperience, .skills, .education-details {
-        page-break-after: avoid;
-    }
-
-    /* Ensure everything fits on a single page */
-    .container {
-        page-break-before: avoid;
-    }
-
-    /* Add page break at the end of the resume if necessary */
-    .rightPanel {
-        page-break-after: always;
+    /* Prevent additional page breaks */
+    @page {
+        size: A4; /* Ensure the print size is A4 */
+        margin: 0; /* Remove default margins */
     }
 }
