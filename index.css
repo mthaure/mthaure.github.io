@@ -184,7 +184,9 @@ a:hover, button:hover {
     }
 }
 
-/* Mobile styles for smartphones */
+
+/* ----------------------------------------------------*/   
+            /* Mobile styles for smartphones */
 @media screen and (max-width: 768px) {
     /* Adjust the container layout to stack the panels */
     .container {
@@ -200,9 +202,15 @@ a:hover, button:hover {
         padding: 10px;
     }
 
+    /* Move h1 to the top of the page */
+    header {
+        order: -1; /* Moves the header to the top */
+    }
+
     /* Adjust the heading font sizes */
     h1 {
         font-size: 2.5em;
+        margin-top: 0; /* Remove any margin above */
     }
 
     h2 {
@@ -245,6 +253,8 @@ a:hover, button:hover {
     }
 }
 
+
+/* ----------------------------------------------------*/   
 /* QR Code Styling */
 .qrCode {
     text-align: center;
