@@ -1,123 +1,198 @@
+/* Global Styles */
 body {
-    font-family: 'Open Sans', sans-serif;  /* Sets default font family */
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;  /* Light grey background for the page */
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
 }
-
+  
 .container {
-    display: flex;  /* Flex layout for main container */
-    width: 210mm;  /* Standard A4 width for print */
-    min-height: 297mm;  /* Standard A4 height for print */
-    margin: 20px auto;  /* Center the container with margin */
-    background-color: white;  /* White background for the container */
-    border: 1px solid #ddd;  /* Light grey border */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    flex-wrap: nowrap;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-/* Styles for Left Panel containing contact details and skills */
+  
 .leftPanel {
-    width: 30%;  /* Panel occupies 30% of the width */
-    background-color: #2c3e50;  /* Dark blue background color */
-    color: rgb(255, 255, 255);  /* White text color */
-    padding: 20px;  /* Inner spacing */
+    width: 30%;
+    background-color: #2e3b4e;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
 }
-
-/* Styles for Right Panel containing main content */
+  
 .rightPanel {
-    width: 70%;  /* Panel occupies 70% of the width */
-    padding: 20px;  /* Inner spacing */
+    width: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
-
-/* Title styles for headings */
-h1, h2, h3 {
-    font-family: 'Julius Sans One', sans-serif;  
-    color: #e20000;
-}
-
+  
 h1 {
-    font-size: 28px;  /* Font size for primary heading */
-    margin-bottom: 10px;  /* Spacing below heading */
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 2.5em;
+    margin: 0 0 10px;
+    color: Black;
 }
-
+  
 h2 {
-    border-bottom: 2px solid #ddd;  /* Separator line below heading */
-    padding-bottom: 5px;  /* Inner spacing below heading text */
-    margin-top: 20px;  /* Spacing above heading */
+    font-family: 'Julius Sans One', sans-serif;
+    color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1px;
+    margin-bottom: 1px;
 }
-
-/* Paragraph and list item styles */
-p, li {
-    font-family: 'Source Sans Pro', sans-serif;  /* Font for body text */
-    color: #000000; 
-    line-height: 1.5;  /* Line height for readability */
+  
+h3 {
+    font-size: 1.25em;
+    color: Black;
 }
-
-.bolded {
-    font-weight: bold;  /* Bold text utility class */
+  
+ul {
+    list-style-type: disc;
+    padding-left: 10px;
 }
-
-/* Contact Details Section */
-.details {
-    margin-top: 20px;  /* Spacing above contact details */
+  
+li {
+    margin-bottom: 1px;
 }
-
+  
 .contactIcon {
-    margin-right: 10px;  /* Spacing between icon and text */
-    color: #ff0000;  /* Red color for contact icons */
+    display: inline-block;
+    width: 1em;
+    text-align: center;
+    margin-right: 8px;
+    vertical-align: middle;
 }
-
-/* Link styling for contact details */
-a {
-    color: #ffffff;  /* White color for links */
-    text-decoration: none;  /* Remove underline from links */
+  
+.website a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
 }
-
-/* Skills Section */
-.skill {
-    display: flex;  /* Flex layout for skill items */
-    justify-content: space-between;  /* Align skill names and years */
-    margin-bottom: 10px;  /* Spacing between skills */
+  
+.website a:hover {
+    text-decoration: underline;
 }
-
-.keyterms {
-    font-size: 14px;  /* Font size for key terms */
-    color: #c53131;  /* Dark red color for key terms */
+  
+.skill-list li {
+    background-color: #2e3b4e;
+    color: white;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 4px;
 }
-
-.alignright {
-    margin-right: 5px;  /* Right alignment spacing */
+  
+/* Education Details css */
+.education-details {
+    font-size: 0.9em;
+    color: white;
 }
-
-.alignleft {
-    margin-left: 5px;  /* Left alignment spacing */
+  
+/* Interactive Hover Effects */
+a:hover, button:hover {
+    color: #ff6347;
+    cursor: pointer;
 }
-
-/* Work Experience Section */
-.workExperience ul {
-    list-style: none;  /* Remove bullet points from list */
-    padding: 0;  /* Remove default padding */
-}
-
+  
+/* Job Section */
 .jobPosition {
-    display: flex;  /* Flex layout for job position items */
-    justify-content: space-between;  /* Align job title and date */
-    font-size: 16px;  /* Font size for job positions */
-    margin-bottom: 5px;  /* Spacing below job position */
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
 }
-
+  
 .projectName {
-    font-size: 14px;  /* Font size for project names */
-    margin-bottom: 10px;  /* Spacing below project name */
+    font-style: italic;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
-
-/* Utility Classes for separators and margins */
+  
 .bottomLineSeparator {
-    border-bottom: 1px solid #ddd;  /* Bottom separator line */
-    padding-bottom: 15px;  /* Spacing below the line */
-    margin-bottom: 15px;  /* Spacing between sections */
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
 }
 
-.lastParagrafNoMarginBottom {
-    margin-bottom: 0;  /* Remove bottom margin for last paragraph */
+.smallText p {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+        font-size: 12px;
+    }
+
+    .container {
+        width: 8.5in; /* US Letter size */
+        height: 11in; /* US Letter size */
+        box-shadow: none;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    .leftPanel, .rightPanel {
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+
+    .bottomLineSeparator {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    ul {
+        padding-left: 15px;
+    }
+
+    .skill-list li {
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 3px 8px;
+    }
+
+    .website a {
+        color: black;
+    }
+
+    .contactIcon {
+        font-size: 1.2em;
+    }
+
+    /* Adjusting margins for better print layout */
+    .leftPanel, .rightPanel {
+        margin: 0;
+        padding: 5px;
+    }
+
+    /* Removing unnecessary elements for printing */
+    .leftPanel .website {
+        display: none;
+    }
 }
