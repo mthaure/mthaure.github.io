@@ -207,6 +207,11 @@ a:hover, button:hover {
         order: -1; /* Moves the header to the top */
     }
 
+    /* Remove the QR code on mobile */
+    .qrCode {
+        display: none;
+    }
+
     /* Adjust the heading font sizes */
     h1 {
         font-size: 2.5em;
