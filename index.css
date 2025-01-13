@@ -133,7 +133,9 @@ a:hover, button:hover {
     margin-left: 30px; 
 }
 
-/* Print style */
+/*----------------------------------------------------------------*/
+
+                        /* Print style */
 @media print {
     /* Ensure the background color is included in the print */
     body, .leftPanel, .rightPanel {
@@ -146,9 +148,11 @@ a:hover, button:hover {
         background-color: #2e3b4e;  /* Blue color */
         color: white;  /* White text */
     }
-
+    h1 {
+        font-size: 2.5em;  /* Ensure good legibility in print */
+    }
     /* Adjusting print font size and other properties for readability */
-    h1, h2, h3, li {
+    h2, h3, li {
         font-size: 12pt;  /* Ensure good legibility in print */
     }
 
