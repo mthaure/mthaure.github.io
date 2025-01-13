@@ -110,7 +110,7 @@ a:hover, button:hover {
     justify-content: space-between;
     margin-top: 10px;
 }
-  
+
 .projectName {
     font-style: italic;
     font-size: 14px;
@@ -131,4 +131,51 @@ a:hover, button:hover {
 }
 .indented {
     margin-left: 30px; 
+}
+
+/* Print style */
+@media print {
+    /* Ensure the background color is included in the print */
+    body, .leftPanel, .rightPanel {
+        -webkit-print-color-adjust: exact;  /* Ensures background color appears in print */
+        print-color-adjust: exact;
+    }
+
+    /* Blue box on the left panel */
+    .leftPanel {
+        background-color: #007BFF;  /* Blue color */
+        color: white;  /* White text */
+    }
+
+    /* Adjusting print font size and other properties for readability */
+    h1, h2, h3, li {
+        font-size: 12pt;  /* Ensure good legibility in print */
+    }
+
+    /* Remove unnecessary styles for printing */
+    .website a, .contactIcon {
+        color: white; /* Ensure text remains readable */
+    }
+
+    /* Ensuring text inside links remains readable */
+    a {
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    /* Remove any unnecessary borders or box shadows in print */
+    .container {
+        box-shadow: none;
+        margin: 0;
+    }
+
+    .rightPanel {
+        background-color: #ffffff; /* Ensure a clean white background for the right panel */
+        color: black; /* Ensure text is readable */
+    }
+
+    /* Remove margins or paddings to optimize space for printing */
+    .indented {
+        margin-left: 15px;
+    }
 }
