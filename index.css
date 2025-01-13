@@ -61,7 +61,8 @@ ul {
 }
   
 li {
-    margin-bottom: 1px;
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
   
 .contactIcon {
@@ -118,9 +119,9 @@ a:hover, button:hover {
 }
   
 .bottomLineSeparator {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid white;
     margin-bottom: 20px;
-    padding-bottom: 15px;
+    padding-bottom: 1px;
 }
 
 .smallText p {
@@ -131,6 +132,80 @@ a:hover, button:hover {
 .indented {
     margin-left: 30px; 
 }
-.no-bold {
-    font-weight: normal; 
-  }
+
+/* Print on single page */
+@media print {
+    /* Reset page margins for printing */
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px; /* Adjust font size for print */
+    }
+
+    .container {
+        display: block;
+        width: 100%;
+        height: auto;
+        box-shadow: none; /* Remove box shadow for printing */
+    }
+
+    .leftPanel, .rightPanel {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .rightPanel {
+        margin-top: 20px;
+    }
+
+    h1, h2, h3 {
+        page-break-before: auto; /* Prevent heading from breaking */
+    }
+
+    h1 {
+        font-size: 2em; /* Adjust header size for print */
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .website a {
+        color: black;
+        text-decoration: none; /* Ensure links are visible when printed */
+    }
+
+    .website a:hover {
+        text-decoration: none;
+    }
+
+    /* Remove background color from the left panel for printing */
+    .leftPanel {
+        background-color: white;
+    }
+
+    .skill-list li, .education-details, .indented {
+        font-size: 12px; /* Adjust font size for smaller text */
+    }
+
+    .jobPosition {
+        font-size: 14px;
+        page-break-inside: avoid; /* Prevent page break inside job entries */
+    }
+
+    /* Prevent breaking on long sections */
+    .workExperience, .skills, .education-details {
+        page-break-after: avoid;
+    }
+
+    /* Ensure everything fits on a single page */
+    .container {
+        page-break-before: avoid;
+    }
+
+    /* Add page break at the end of the resume if necessary */
+    .rightPanel {
+        page-break-after: always;
+    }
+}
