@@ -191,7 +191,7 @@ a:hover, button:hover {
     }
 
     /* Left and right panels should take full width on mobile */
-    .leftPanel, .rightPanel {
+    .rightPanel, .leftPanel {
         width: 100%;
         padding: 10px;
     }
@@ -208,7 +208,14 @@ a:hover, button:hover {
     h3 {
         font-size: 1.1em;
     }
-   /* Adjust margins for lists and elements */
+
+    /* Reduce the padding for skill and contact items */
+    .skill-list li, .website a, .contactIcon {
+        font-size: 12px;
+        padding: 3px 0;
+    }
+
+    /* Adjust margins for lists and elements */
     .indented {
         margin-left: 20px;
     }
@@ -232,23 +239,17 @@ a:hover, button:hover {
     .contactIcon {
         margin-right: 10px;
     }
-    /* Reduce the padding for skill and contact items */
-    .skill-list li, .website a, .contactIcon {
-        font-size: 12px;
-        padding: 3px 0;
-    }
-
- 
 }
 
 /* QR Code Styling */
 .qrCode {
     text-align: center;
-    margin-bottom: 20px; /* Space below the QR code */
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .qrImage {
-    width: 80px;  /* Adjust the width of the QR code */
+    width: 100px;  /* Adjust the width of the QR code */
     height: auto;  /* Keep aspect ratio */
     border-radius: 8px;  /* Optional: Rounded corners for the QR code */
 }
