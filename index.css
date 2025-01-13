@@ -39,12 +39,12 @@ h1 {
     font-family: 'Julius Sans One', sans-serif;
     font-size: 2.5em;
     margin: 0 0 10px;
-    color: Black;
+    color: black;
 }
   
 h2 {
     font-family: 'Julius Sans One', sans-serif;
-    color: #ffffff;
+    color: white;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1px;
     margin-bottom: 1px;
@@ -52,7 +52,7 @@ h2 {
   
 h3 {
     font-size: 1.25em;
-    color: Black;
+    color: black;
 }
   
 ul {
@@ -126,73 +126,4 @@ a:hover, button:hover {
     display: flex;
     align-items: center;
     margin: 5px 0;
-}
-
-/* Print Styles */
-@media print {
-    body {
-        background-color: white;
-        color: black;
-        font-size: 12px;
-    }
-
-    .container {
-        width: 8.5in; /* US Letter size */
-        height: 11in; /* US Letter size */
-        box-shadow: none;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    .leftPanel, .rightPanel {
-        padding: 10px;
-        box-sizing: border-box;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    h2 {
-        font-size: 1.2em;
-    }
-
-    h3 {
-        font-size: 1.1em;
-    }
-
-    .bottomLineSeparator {
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
-
-    ul {
-        padding-left: 15px;
-    }
-
-    .skill-list li {
-        background-color: #f4f4f4;
-        color: #333;
-        padding: 3px 8px;
-    }
-
-    .website a {
-        color: black;
-    }
-
-    .contactIcon {
-        font-size: 1.2em;
-    }
-
-    /* Adjusting margins for better print layout */
-    .leftPanel, .rightPanel {
-        margin: 0;
-        padding: 5px;
-    }
-
-    /* Removing unnecessary elements for printing */
-    .leftPanel .website {
-        display: none;
-    }
 }
