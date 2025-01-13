@@ -179,3 +179,64 @@ a:hover, button:hover {
         margin-left: 15px;
     }
 }
+
+/* Mobile styles for smartphones */
+@media screen and (max-width: 768px) {
+    /* Adjust the container layout to stack the panels */
+    .container {
+        flex-direction: column;
+        max-width: 100%;
+        min-height: auto;
+        box-shadow: none;
+    }
+
+    /* Left and right panels should take full width on mobile */
+    .leftPanel, .rightPanel {
+        width: 100%;
+        padding: 10px;
+    }
+
+    /* Adjust the heading font sizes */
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+
+    /* Reduce the padding for skill and contact items */
+    .skill-list li, .website a, .contactIcon {
+        font-size: 12px;
+        padding: 3px 0;
+    }
+
+    /* Adjust margins for lists and elements */
+    .indented {
+        margin-left: 20px;
+    }
+
+    .jobPosition {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Adjust spacing for better readability */
+    .projectName {
+        font-size: 12px;
+    }
+
+    li {
+        font-size: 14px;
+    }
+
+    /* Contact icons and links should be better spaced for touch devices */
+    .contactIcon {
+        margin-right: 10px;
+    }
+}
