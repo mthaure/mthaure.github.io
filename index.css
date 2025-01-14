@@ -188,7 +188,7 @@ a:hover, button:hover {
 @media screen and (max-width: 768px) {
     /* Container adjustments */
     .container {
-        flex-direction: column;
+        flex-direction: column-reverse;
         width: 100%;
         max-width: 100%;
     }
@@ -200,15 +200,19 @@ a:hover, button:hover {
         text-align: center;
     }
 
-    /* Right Panel */
+    /* Right Panel adjustments */
     .rightPanel {
         width: 100%;
         padding: 15px;
+        display: flex; /* Use flexbox for positioning */
+        flex-direction: column; /* Stack items vertically */
     }
 
-    /* QR Code Resizing */
-    .qrImage {
-        width: 80px;
+    /* QR Code adjustments */
+    .qrCode {
+        margin-top: auto; /* Push QR code to the bottom */
+        text-align: center;
+        width: 100%; /* Optional, make the QR code container full width */
     }
 
     /* Adjusting font sizes for readability */
