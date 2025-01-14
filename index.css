@@ -183,7 +183,57 @@ a:hover, button:hover {
         margin-left: 15px;
     }
 }
+/* ---------------------------------------------------- */
+            /* Mobile Section */
+@media screen and (max-width: 768px) {
+    /* Container adjustments */
+    .container {
+        flex-direction: column-reverse;;
+        width: 100%;
+        max-width: 100%;
+    }
 
+    /* Left Panel */
+    .leftPanel {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    /* Right Panel */
+    .rightPanel {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* QR Code Resizing */
+    .qrImage {
+        width: 80px;
+    }
+
+    /* Adjusting font sizes for readability */
+    h1 {
+        font-size: 2em;
+    }
+
+    h2, h3 {
+        font-size: 1.25em;
+    }
+
+    li {
+        font-size: 14px;
+    }
+
+    /* Adjusting padding for better spacing */
+    .indented {
+        margin-left: 15px;
+    }
+
+    /* Link size and touch-friendly enhancements */
+    .website a {
+        font-size: 16px;
+    }
+}
 /* ----------------------------------------------------*/   
 /* QR Code Styling */
 .qrCode {
