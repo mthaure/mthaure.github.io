@@ -196,7 +196,7 @@ a:hover, button:hover {
 @media screen and (max-width: 768px) {
     /* Container adjustments */
     .container {
-        flex-direction: column;  /* Keep the order of elements in a column */
+        flex-direction: column-reverse;
         width: 100%;
         max-width: 100%;
         position: relative;
@@ -207,16 +207,15 @@ a:hover, button:hover {
         width: 100%;
         padding: 10px;
         text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;  /* Distribute content vertically */
-        height: 100%; /* Take full height */
+        position: relative;
     }
 
-    /* Move QR Code to the Bottom */
+    /* Move QR Code to Bottom */
     .qrCode {
-        margin-top: auto;  /* Pushes the QR code to the bottom */
-        text-align: center;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 100%;
     }
 
