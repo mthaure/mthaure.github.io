@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
 }
-
+  
 .container {
     display: flex;
     flex-direction: row;
@@ -19,7 +19,7 @@ body {
     flex-wrap: nowrap;
     box-shadow: 0 0 10px rgba(238, 10, 150, 0.1);
 }
-
+  
 .leftPanel {
     width: 30%;
     background-color: #2e3b4e;
@@ -27,21 +27,21 @@ body {
     padding: 10px;
     box-sizing: border-box;
 }
-
+  
 .rightPanel {
     width: 70%;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
 }
-
+  
 h1 {
     font-family: 'Julius Sans One', sans-serif;
     font-size: 2.5em;
     margin: 0 0 10px;
     color: black;
 }
-
+  
 h2 {
     font-family: 'Julius Sans One', sans-serif;
     color: white;
@@ -49,22 +49,22 @@ h2 {
     padding-bottom: 1px;
     margin-bottom: 1px;
 }
-
+  
 h3 {
     font-size: 1.25em;
     color: black;
 }
-
+  
 ul {
     list-style-type: disc;
     padding-left: 10px;
 }
-
+  
 li {
     margin-top: 6px;
     margin-bottom: 6px;
 }
-
+  
 .contactIcon {
     display: inline-block;
     width: 1em;
@@ -72,17 +72,17 @@ li {
     margin-right: 8px;
     vertical-align: middle;
 }
-
+  
 .website a {
     color: white;
     text-decoration: none;
     font-size: 14px;
 }
-
+  
 .website a:hover {
     text-decoration: underline;
 }
-
+  
 .skill-list li {
     background-color: #2e3b4e;
     color: white;
@@ -90,19 +90,19 @@ li {
     margin: 5px 0;
     border-radius: 4px;
 }
-
-/* Education Details */
+  
+/* Education Details css */
 .education-details {
     font-size: 0.9em;
     color: white;
 }
-
+  
 /* Interactive Hover Effects */
 a:hover, button:hover {
     color: #ff6347;
     cursor: pointer;
 }
-
+  
 /* Job Section */
 .jobPosition {
     font-weight: bold;
@@ -117,7 +117,7 @@ a:hover, button:hover {
     margin-bottom: 5px;
     margin-top: 5px;
 }
-
+  
 .bottomLineSeparator {
     border-bottom: 1px solid white;
     margin-bottom: 20px;
@@ -129,77 +129,68 @@ a:hover, button:hover {
     align-items: center;
     margin: 5px 0;
 }
-
 .indented {
-    margin-left: 30px;
+    margin-left: 30px; 
 }
 
-/* QR Code Styling */
-.qrCode {
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
+/*--------------------------------------------------------*/
 
-.qrImage {
-    width: 100px;
-    height: auto;
-    border-radius: 8px;
-}
-
-
-/* Print Style */
+                        /* Print style */
 @media print {
+    /* Ensure the background color is included in the print */
     body, .leftPanel, .rightPanel {
-        -webkit-print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;  /* Ensures background color appears in print */
         print-color-adjust: exact;
     }
 
+    /* Blue box on the left panel */
     .leftPanel {
-        background-color: #2e3b4e;
-        color: white;
+        background-color: #2e3b4e;  /* Blue color */
+        color: white;  /* White text */
     }
-
     h1 {
-        font-size: 2.5em;
+        font-size: 2.5em;  /* Ensure good legibility in print */
     }
-
+    /* Adjusting print font size and other properties for readability */
     h2, h3, li {
-        font-size: 12pt;
+        font-size: 12pt;  /* Ensure good legibility in print */
     }
 
+    /* Remove unnecessary styles for printing */
     .website a, .contactIcon {
-        color: white;
+        color: white; /* Ensure text remains readable */
     }
 
+    /* Ensuring text inside links remains readable */
     a {
         color: #007BFF;
         text-decoration: none;
     }
 
+    /* Remove any unnecessary borders or box shadows in print */
     .container {
         box-shadow: none;
         margin: 0;
     }
 
     .rightPanel {
-        background-color: #ffffff;
-        color: black;
+        background-color: #ffffff; /* Ensure a clean white background for the right panel */
+        color: black; /* Ensure text is readable */
     }
 
+    /* Remove margins or paddings to optimize space for printing */
     .indented {
         margin-left: 15px;
     }
 }
-
-/* Mobile Section */
+/* ---------------------------------------------------- */
+            /* Mobile Section */
 @media screen and (max-width: 768px) {
     /* Container adjustments */
     .container {
-        flex-direction: column-reverse;
+        flex-direction: column;
         width: 100%;
         max-width: 100%;
-        position: relative;
     }
 
     /* Left Panel */
@@ -207,16 +198,12 @@ a:hover, button:hover {
         width: 100%;
         padding: 10px;
         text-align: center;
-        position: relative;
     }
 
-    /* Move QR Code to Bottom */
-    .qrCode {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+    /* Right Panel */
+    .rightPanel {
         width: 100%;
+        padding: 15px;
     }
 
     /* QR Code Resizing */
@@ -246,4 +233,17 @@ a:hover, button:hover {
     .website a {
         font-size: 16px;
     }
+}
+/* ----------------------------------------------------*/   
+/* QR Code Styling */
+.qrCode {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.qrImage {
+    width: 100px;  /* Adjust the width of the QR code */
+    height: auto;  /* Keep aspect ratio */
+    border-radius: 8px;  /* Optional: Rounded corners for the QR code */
 }
