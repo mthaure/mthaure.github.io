@@ -4,8 +4,8 @@ body {
     line-height: 1;
     margin: 0;
     padding: 0;
-    background-color: White;
-    color: Black;
+    background-color: white;
+    color: black;
     display: flex;
     justify-content: center;
 }
@@ -134,84 +134,84 @@ a:hover, button:hover {
 }
 
 /*--------------------------------------------------------*/
-
-                        /* Print style */
+/* Print Style */
 @media print {
-    /* Ensure the background color is included in the print */
     body, .leftPanel, .rightPanel {
-        -webkit-print-color-adjust: exact;  /* Ensures background color appears in print */
+        -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
-    /* Blue box on the left panel */
     .leftPanel {
-        background-color: #2e3b4e;  /* Blue color */
-        color: white;  /* White text */
+        background-color: #2e3b4e;
+        color: white;
     }
+    
     h1 {
-        font-size: 2.5em;  /* Ensure good legibility in print */
+        font-size: 2.5em;
     }
-    /* Adjusting print font size and other properties for readability */
+
     h2, h3, li {
-        font-size: 12pt;  /* Ensure good legibility in print */
+        font-size: 12pt;
     }
 
-    /* Remove unnecessary styles for printing */
     .website a, .contactIcon {
-        color: white; /* Ensure text remains readable */
+        color: white;
     }
 
-    /* Ensuring text inside links remains readable */
     a {
         color: #007BFF;
         text-decoration: none;
     }
 
-    /* Remove any unnecessary borders or box shadows in print */
     .container {
         box-shadow: none;
         margin: 0;
     }
 
     .rightPanel {
-        background-color: #ffffff; /* Ensure a clean white background for the right panel */
-        color: black; /* Ensure text is readable */
+        background-color: #ffffff;
+        color: black;
     }
 
-    /* Remove margins or paddings to optimize space for printing */
     .indented {
         margin-left: 15px;
     }
 }
-/* ---------------------------------------------------- */
-            /* Mobile Section */
+
+/*--------------------------------------------------------*/
+/* Mobile Section */
 @media screen and (max-width: 768px) {
-    /* Container adjustments */
     .container {
-        flex-direction: column-reverse;;
+        flex-direction: column;
         width: 100%;
         max-width: 100%;
     }
 
-    /* Left Panel */
+    /* Move QR Code to Bottom */
     .leftPanel {
-        width: 100%;
-        padding: 10px;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
     }
 
-    /* Right Panel */
-    .rightPanel {
+    .qrCode {
+        margin-top: auto;
+        margin-bottom: 20px;
+    }
+
+    /* Adjust font sizes and layout for better readability */
+    .rightPanel, .leftPanel {
         width: 100%;
         padding: 15px;
     }
 
-    /* QR Code Resizing */
     .qrImage {
         width: 80px;
+        height: auto;
+        margin: 0 auto;
     }
 
-    /* Adjusting font sizes for readability */
     h1 {
         font-size: 2em;
     }
@@ -224,17 +224,16 @@ a:hover, button:hover {
         font-size: 14px;
     }
 
-    /* Adjusting padding for better spacing */
     .indented {
         margin-left: 15px;
     }
 
-    /* Link size and touch-friendly enhancements */
     .website a {
         font-size: 16px;
     }
 }
-/* ----------------------------------------------------*/   
+
+/*--------------------------------------------------------*/  
 /* QR Code Styling */
 .qrCode {
     text-align: center;
@@ -243,7 +242,7 @@ a:hover, button:hover {
 }
 
 .qrImage {
-    width: 100px;  /* Adjust the width of the QR code */
-    height: auto;  /* Keep aspect ratio */
-    border-radius: 8px;  /* Optional: Rounded corners for the QR code */
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
 }
