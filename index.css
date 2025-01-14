@@ -4,12 +4,12 @@ body {
     line-height: 1;
     margin: 0;
     padding: 0;
-    background-color: white;
-    color: black;
+    background-color: White;
+    color: Black;
     display: flex;
     justify-content: center;
 }
-  
+
 .container {
     display: flex;
     flex-direction: row;
@@ -19,7 +19,7 @@ body {
     flex-wrap: nowrap;
     box-shadow: 0 0 10px rgba(238, 10, 150, 0.1);
 }
-  
+
 .leftPanel {
     width: 30%;
     background-color: #2e3b4e;
@@ -27,21 +27,21 @@ body {
     padding: 10px;
     box-sizing: border-box;
 }
-  
+
 .rightPanel {
     width: 70%;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
 }
-  
+
 h1 {
     font-family: 'Julius Sans One', sans-serif;
     font-size: 2.5em;
     margin: 0 0 10px;
     color: black;
 }
-  
+
 h2 {
     font-family: 'Julius Sans One', sans-serif;
     color: white;
@@ -49,22 +49,22 @@ h2 {
     padding-bottom: 1px;
     margin-bottom: 1px;
 }
-  
+
 h3 {
     font-size: 1.25em;
     color: black;
 }
-  
+
 ul {
     list-style-type: disc;
     padding-left: 10px;
 }
-  
+
 li {
     margin-top: 6px;
     margin-bottom: 6px;
 }
-  
+
 .contactIcon {
     display: inline-block;
     width: 1em;
@@ -72,17 +72,17 @@ li {
     margin-right: 8px;
     vertical-align: middle;
 }
-  
+
 .website a {
     color: white;
     text-decoration: none;
     font-size: 14px;
 }
-  
+
 .website a:hover {
     text-decoration: underline;
 }
-  
+
 .skill-list li {
     background-color: #2e3b4e;
     color: white;
@@ -90,19 +90,19 @@ li {
     margin: 5px 0;
     border-radius: 4px;
 }
-  
-/* Education Details css */
+
+/* Education Details */
 .education-details {
     font-size: 0.9em;
     color: white;
 }
-  
+
 /* Interactive Hover Effects */
 a:hover, button:hover {
     color: #ff6347;
     cursor: pointer;
 }
-  
+
 /* Job Section */
 .jobPosition {
     font-weight: bold;
@@ -117,7 +117,7 @@ a:hover, button:hover {
     margin-bottom: 5px;
     margin-top: 5px;
 }
-  
+
 .bottomLineSeparator {
     border-bottom: 1px solid white;
     margin-bottom: 20px;
@@ -129,11 +129,25 @@ a:hover, button:hover {
     align-items: center;
     margin: 5px 0;
 }
+
 .indented {
-    margin-left: 30px; 
+    margin-left: 30px;
 }
 
-/*--------------------------------------------------------*/
+/* QR Code Styling */
+.qrCode {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.qrImage {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+}
+
+
 /* Print Style */
 @media print {
     body, .leftPanel, .rightPanel {
@@ -145,7 +159,7 @@ a:hover, button:hover {
         background-color: #2e3b4e;
         color: white;
     }
-    
+
     h1 {
         font-size: 2.5em;
     }
@@ -178,40 +192,39 @@ a:hover, button:hover {
     }
 }
 
-/*--------------------------------------------------------*/
 /* Mobile Section */
 @media screen and (max-width: 768px) {
+    /* Container adjustments */
     .container {
-        flex-direction: column;
+        flex-direction: column-reverse;
         width: 100%;
         max-width: 100%;
+        position: relative;
+    }
+
+    /* Left Panel */
+    .leftPanel {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        position: relative;
     }
 
     /* Move QR Code to Bottom */
-    .leftPanel {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 100vh;
-    }
-
     .qrCode {
-        margin-top: auto;
-        margin-bottom: 20px;
-    }
-
-    /* Adjust font sizes and layout for better readability */
-    .rightPanel, .leftPanel {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 100%;
-        padding: 15px;
     }
 
+    /* QR Code Resizing */
     .qrImage {
         width: 80px;
-        height: auto;
-        margin: 0 auto;
     }
 
+    /* Adjusting font sizes for readability */
     h1 {
         font-size: 2em;
     }
@@ -224,25 +237,13 @@ a:hover, button:hover {
         font-size: 14px;
     }
 
+    /* Adjusting padding for better spacing */
     .indented {
         margin-left: 15px;
     }
 
+    /* Link size and touch-friendly enhancements */
     .website a {
         font-size: 16px;
     }
-}
-
-/*--------------------------------------------------------*/  
-/* QR Code Styling */
-.qrCode {
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-.qrImage {
-    width: 100px;
-    height: auto;
-    border-radius: 8px;
 }
