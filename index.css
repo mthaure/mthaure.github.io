@@ -200,19 +200,10 @@ a:hover, button:hover {
         text-align: center;
     }
 
-    /* Right Panel adjustments */
+    /* Right Panel */
     .rightPanel {
         width: 100%;
         padding: 15px;
-        display: flex; /* Use flexbox for positioning */
-        flex-direction: column; /* Stack items vertically */
-        flex-grow: 1; /* Allow the right panel to grow and take available space */
-    }
-
-    /* QR Code adjustments */
-    .qrCode {
-        margin-top: auto; /* Push QR code to the bottom */
-        text-align: center;
     }
 
     /* Adjusting font sizes for readability */
