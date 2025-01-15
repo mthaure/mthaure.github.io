@@ -14,8 +14,7 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    max-width: 1200px;
-    min-height: 100vh;
+    max-width: 100%;
     flex-wrap: nowrap;
     box-shadow: 0 0 10px rgba(238, 10, 150, 0.1);
 }
@@ -149,33 +148,34 @@ button:hover {
 
     /* Ensure the container doesn't overflow */
     .container {
-        max-width: 100%;
         width: 100%;
-        height: 100%;
         display: block;
         page-break-inside: avoid;
+        max-width: 100%;
+        height: auto;
     }
 
-    /* Prevent left panel from overflowing */
+    /* Ensure the leftPanel is correctly sized and on the page */
     .leftPanel {
         width: 30%;
         height: auto;
         overflow: visible;
         page-break-inside: avoid;
-        padding-right: 20px; /* Allow space for print margins */
+        padding-right: 20px;
+        page-break-before: avoid;
     }
 
-    /* Prevent right panel from overflowing */
+    /* Right panel settings */
     .rightPanel {
         width: 70%;
         height: auto;
         overflow: visible;
         page-break-inside: avoid;
-        padding-left: 20px; /* Allow space for print margins */
+        padding-left: 20px;
     }
 
-    /* Prevent any page breaks within sections */
-    section, .workExperience, .details {
+    /* Prevent page breaks within content sections */
+    section, .workExperience, .details, .leftPanel, .rightPanel {
         page-break-inside: avoid;
     }
 
@@ -193,7 +193,7 @@ button:hover {
         font-size: 12px;
     }
 
-    /* Remove unnecessary borders and background colors */
+    /* Remove unnecessary borders and background colors for print */
     .container, .leftPanel, .rightPanel {
         box-shadow: none;
         background-color: transparent;
@@ -212,10 +212,31 @@ button:hover {
         margin: 0;
     }
 
-    /* Prevent page breaks */
+    /* Set max width and avoid page breaks between elements */
     .leftPanel, .rightPanel {
         page-break-before: avoid;
         page-break-after: avoid;
+    }
+
+    /* Adjust layout for entire container */
+    .container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        max-width: 100%;
+    }
+
+    /* Shrink container to ensure everything fits on the page */
+    .leftPanel,
+    .rightPanel {
+        width: 48%; /* Reduce width to avoid overflow */
+        height: auto;
+    }
+
+    /* Prevent any page breaks in the middle of the container */
+    .leftPanel, .rightPanel {
+        page-break-inside: avoid;
     }
 }
 
