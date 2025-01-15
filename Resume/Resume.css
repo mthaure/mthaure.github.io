@@ -137,7 +137,6 @@ button:hover {
 
 /*--------------------------------------------------------*/
 /* Print style */
-
 @media print {
 
     /* Ensure the background color is included in the print */
@@ -149,6 +148,14 @@ button:hover {
         print-color-adjust: exact;
     }
 
+    /* Set page size to A4 and remove extra margins */
+    @page {
+        size: A4;
+        /* Ensure A4 size paper */
+        margin: 10mm;
+        /* Small margin for all sides */
+    }
+
     /* Ensure container behaves as a single block for print */
     .container {
         display: block;
@@ -157,6 +164,8 @@ button:hover {
         margin: 0;
         padding: 0;
         box-shadow: none;
+        page-break-before: always;
+        /* Ensure the content starts at the top of the page */
     }
 
     /* Blue box on the left panel */
@@ -166,12 +175,12 @@ button:hover {
         color: white;
         /* White text */
         width: 30%;
-        float: left;
         padding: 10px;
         page-break-inside: avoid;
         /* Prevent it from splitting onto another page */
         margin-right: 20px;
-        /* Provide some space on the right */
+        /* Provide space on the right */
+        float: left;
     }
 
     /* Right Panel adjustments */
@@ -180,16 +189,18 @@ button:hover {
         /* Clean white background for the right panel */
         color: black;
         width: 65%;
-        float: left;
         padding: 20px;
         page-break-inside: avoid;
         /* Prevent it from splitting onto another page */
+        float: left;
     }
 
-    /* Header */
+    /* Ensure the main header fits on one page */
     h1 {
         font-size: 2.5em;
         /* Ensure good legibility in print */
+        margin-bottom: 0;
+        /* Remove bottom margin */
     }
 
     h2,
@@ -197,6 +208,14 @@ button:hover {
     li {
         font-size: 12pt;
         /* Ensure good legibility in print */
+    }
+
+    /* Adjust QR Code Image size */
+    .qrImage {
+        width: 90px;
+        /* Adjust QR code size */
+        height: auto;
+        border-radius: 8px;
     }
 
     /* Remove unnecessary styles for printing */
@@ -212,26 +231,10 @@ button:hover {
         text-decoration: none;
     }
 
-    /* Adjusted margins for better printing */
+    /* Adjust padding/margins to save space */
     .indented {
-        margin-left: 15px;
-    }
-
-    /* Adjust QR Code Image size */
-    .qrImage {
-        width: 90px;
-        /* Adjust QR code size */
-        height: auto;
-        border-radius: 8px;
-    }
-
-    /* Force the content into a single page layout */
-    body {
-        margin: 0;
-        padding: 0;
-        page-break-before: always;
-        /* Ensures content starts at the top of the page */
-        max-width: 100%;
+        margin-left: 10px;
+        /* Smaller indent to fit content */
     }
 
     /* Prevent page breaks between sections */
@@ -239,6 +242,84 @@ button:hover {
     .item {
         page-break-inside: avoid;
     }
+
+    /* Reduce margins/paddings for content */
+    .workExperience,
+    .details {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Prevent splitting content within job positions */
+    .jobPosition,
+    .projectName {
+        page-break-inside: avoid;
+    }
+
+    /* Ensure no page breaks within the content */
+    .container {
+        page-break-before: auto;
+        page-break-after: auto;
+    }
+
+    /* Avoid breaking the QR code across pages */
+    .qrCode {
+        page-break-before: avoid;
+    }
+}
+
+/* Header */
+h1 {
+    font-size: 2.5em;
+    /* Ensure good legibility in print */
+}
+
+h2,
+h3,
+li {
+    font-size: 12pt;
+    /* Ensure good legibility in print */
+}
+
+/* Remove unnecessary styles for printing */
+.website a,
+.contactIcon {
+    color: white;
+    /* Ensure text remains readable */
+}
+
+/* Ensuring text inside links remains readable */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+/* Adjusted margins for better printing */
+.indented {
+    margin-left: 15px;
+}
+
+/* Adjust QR Code Image size */
+.qrImage {
+    width: 90px;
+    /* Adjust QR code size */
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Force the content into a single page layout */
+body {
+    margin: 0;
+    padding: 0;
+    page-break-before: always;
+    /* Ensures content starts at the top of the page */
+    max-width: 100%;
+}
+
+/* Prevent page breaks between sections */
+section,
+.item {
+    page-break-inside: avoid;
 }
 
 /* ---------------------------------------------------- */
