@@ -135,25 +135,18 @@ button:hover {
     margin-left: 30px;
 }
 
-/*--------------------------------------------------------*/
 /* Print style */
 @media print {
-
     /* Ensure the background color is included in the print */
-    body,
-    .leftPanel,
-    .rightPanel {
-        -webkit-print-color-adjust: exact;
-        /* Ensures background color appears in print */
+    body, .leftPanel, .rightPanel {
+        -webkit-print-color-adjust: exact;  /* Ensures background color appears in print */
         print-color-adjust: exact;
     }
 
     /* Set page size to A4 and remove extra margins */
     @page {
-        size: A4;
-        /* Ensure A4 size paper */
-        margin: 10mm;
-        /* Small margin for all sides */
+        size: A4; /* Ensure A4 size paper */
+        margin: 10mm; /* Small margin for all sides */
     }
 
     /* Ensure container behaves as a single block for print */
@@ -164,65 +157,50 @@ button:hover {
         margin: 0;
         padding: 0;
         box-shadow: none;
-        page-break-before: always;
-        /* Ensure the content starts at the top of the page */
+        page-break-before: always; /* Ensure the content starts at the top of the page */
     }
 
     /* Blue box on the left panel */
     .leftPanel {
-        background-color: #2e3b4e;
-        /* Blue color */
-        color: white;
-        /* White text */
+        background-color: #2e3b4e;  /* Blue color */
+        color: white;  /* White text */
         width: 30%;
         padding: 10px;
-        page-break-inside: avoid;
-        /* Prevent it from splitting onto another page */
-        margin-right: 20px;
-        /* Provide space on the right */
+        page-break-inside: avoid; /* Prevent it from splitting onto another page */
+        margin-right: 20px;  /* Provide space on the right */
         float: left;
     }
 
     /* Right Panel adjustments */
     .rightPanel {
-        background-color: #ffffff;
-        /* Clean white background for the right panel */
+        background-color: #ffffff; /* Clean white background for the right panel */
         color: black;
         width: 65%;
         padding: 20px;
-        page-break-inside: avoid;
-        /* Prevent it from splitting onto another page */
+        page-break-inside: avoid; /* Prevent it from splitting onto another page */
         float: left;
     }
 
     /* Ensure the main header fits on one page */
     h1 {
-        font-size: 2.5em;
-        /* Ensure good legibility in print */
-        margin-bottom: 0;
-        /* Remove bottom margin */
+        font-size: 2.5em;  /* Ensure good legibility in print */
+        margin-bottom: 0;  /* Remove bottom margin */
     }
 
-    h2,
-    h3,
-    li {
-        font-size: 12pt;
-        /* Ensure good legibility in print */
+    h2, h3, li {
+        font-size: 12pt;  /* Ensure good legibility in print */
     }
 
     /* Adjust QR Code Image size */
     .qrImage {
-        width: 90px;
-        /* Adjust QR code size */
+        width: 90px; /* Adjust QR code size */
         height: auto;
         border-radius: 8px;
     }
 
     /* Remove unnecessary styles for printing */
-    .website a,
-    .contactIcon {
-        color: white;
-        /* Ensure text remains readable */
+    .website a, .contactIcon {
+        color: white; /* Ensure text remains readable */
     }
 
     /* Ensuring text inside links remains readable */
@@ -233,26 +211,22 @@ button:hover {
 
     /* Adjust padding/margins to save space */
     .indented {
-        margin-left: 10px;
-        /* Smaller indent to fit content */
+        margin-left: 10px; /* Smaller indent to fit content */
     }
 
     /* Prevent page breaks between sections */
-    section,
-    .item {
+    section, .item {
         page-break-inside: avoid;
     }
 
     /* Reduce margins/paddings for content */
-    .workExperience,
-    .details {
+    .workExperience, .details {
         margin: 0;
         padding: 0;
     }
 
     /* Prevent splitting content within job positions */
-    .jobPosition,
-    .projectName {
+    .jobPosition, .projectName {
         page-break-inside: avoid;
     }
 
@@ -266,60 +240,6 @@ button:hover {
     .qrCode {
         page-break-before: avoid;
     }
-}
-
-/* Header */
-h1 {
-    font-size: 2.5em;
-    /* Ensure good legibility in print */
-}
-
-h2,
-h3,
-li {
-    font-size: 12pt;
-    /* Ensure good legibility in print */
-}
-
-/* Remove unnecessary styles for printing */
-.website a,
-.contactIcon {
-    color: white;
-    /* Ensure text remains readable */
-}
-
-/* Ensuring text inside links remains readable */
-a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-/* Adjusted margins for better printing */
-.indented {
-    margin-left: 15px;
-}
-
-/* Adjust QR Code Image size */
-.qrImage {
-    width: 90px;
-    /* Adjust QR code size */
-    height: auto;
-    border-radius: 8px;
-}
-
-/* Force the content into a single page layout */
-body {
-    margin: 0;
-    padding: 0;
-    page-break-before: always;
-    /* Ensures content starts at the top of the page */
-    max-width: 100%;
-}
-
-/* Prevent page breaks between sections */
-section,
-.item {
-    page-break-inside: avoid;
 }
 
 /* ---------------------------------------------------- */
