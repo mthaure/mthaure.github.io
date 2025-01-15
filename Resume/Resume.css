@@ -136,6 +136,104 @@ button:hover {
 }
 
 /* ---------------------------------------------------- */
+/* Global Styles (print) */
+@media print {
+    body {
+        font-size: 12px; /* Adjust font size to make content fit on one page */
+        line-height: 1.4;
+        background-color: white;
+        color: black;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .container {
+        display: block; /* Make the container block to fit the page */
+        width: 100%;
+        max-width: 100%;
+        min-height: 100%;
+        box-shadow: none; /* Remove the shadow for print */
+    }
+
+    .leftPanel, .rightPanel {
+        width: 100%;
+        padding: 5px; /* Reduce padding for print */
+        box-sizing: border-box;
+    }
+
+    /* Reduce font size */
+    h1 {
+        font-size: 1.75em; /* Smaller size for print */
+    }
+
+    h2 {
+        font-size: 1.2em; /* Adjust heading font size */
+    }
+
+    h3 {
+        font-size: 1em; /* Adjust subheading font size */
+    }
+
+    li {
+        font-size: 12px; /* Smaller font size for list items */
+    }
+
+    .website a {
+        font-size: 12px; /* Adjust font size for links */
+    }
+
+    .qrCode {
+        display: none; /* Hide QR code in print */
+    }
+
+    .jobPosition, .projectName {
+        font-size: 12px; /* Adjust font size for job section */
+    }
+
+    /* Remove bottom line separator for a cleaner print layout */
+    .bottomLineSeparator {
+        border: none;
+    }
+
+    /* Ensure no page breaks in the middle of the content */
+    .container, .leftPanel, .rightPanel {
+        page-break-inside: avoid;
+    }
+
+    /* Optional: Avoid extra space at the bottom of the page */
+    .rightPanel {
+        margin-bottom: 20px;
+    }
+
+    /* Adjust for mobile layout when printing */
+    @media screen and (max-width: 768px) {
+        .container {
+            flex-direction: column-reverse;
+        }
+
+        .leftPanel, .rightPanel {
+            width: 100%;
+        }
+
+        /* Adjust font size further if necessary */
+        h1 {
+            font-size: 1.5em;
+        }
+
+        h2, h3 {
+            font-size: 1em;
+        }
+
+        li {
+            font-size: 10px;
+        }
+    }
+}
+
+
+/* ---------------------------------------------------- */
 /* Mobile Section */
 @media screen and (max-width: 768px) {
 
