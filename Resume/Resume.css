@@ -162,6 +162,7 @@ button:hover {
         height: auto;
         overflow: visible;
         page-break-inside: avoid;
+        padding-right: 20px; /* Allow space for print margins */
     }
 
     /* Prevent right panel from overflowing */
@@ -170,6 +171,7 @@ button:hover {
         height: auto;
         overflow: visible;
         page-break-inside: avoid;
+        padding-left: 20px; /* Allow space for print margins */
     }
 
     /* Prevent any page breaks within sections */
@@ -208,6 +210,12 @@ button:hover {
         width: 50px; /* Resize to a smaller width for print */
         height: auto;
         margin: 0;
+    }
+
+    /* Prevent page breaks */
+    .leftPanel, .rightPanel {
+        page-break-before: avoid;
+        page-break-after: avoid;
     }
 }
 
