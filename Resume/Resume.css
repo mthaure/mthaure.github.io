@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
 }
-  
+
 .container {
     display: flex;
     flex-direction: row;
@@ -19,7 +19,7 @@ body {
     flex-wrap: nowrap;
     box-shadow: 0 0 10px rgba(238, 10, 150, 0.1);
 }
-  
+
 .leftPanel {
     width: 30%;
     background-color: #2e3b4e;
@@ -27,21 +27,21 @@ body {
     padding: 10px;
     box-sizing: border-box;
 }
-  
+
 .rightPanel {
     width: 70%;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
 }
-  
+
 h1 {
     font-family: 'Julius Sans One', sans-serif;
     font-size: 2.5em;
     margin: 0 0 10px;
     color: black;
 }
-  
+
 h2 {
     font-family: 'Julius Sans One', sans-serif;
     color: white;
@@ -49,22 +49,22 @@ h2 {
     padding-bottom: 1px;
     margin-bottom: 1px;
 }
-  
+
 h3 {
     font-size: 1.25em;
     color: black;
 }
-  
+
 ul {
     list-style-type: disc;
     padding-left: 10px;
 }
-  
+
 li {
     margin-top: 6px;
     margin-bottom: 6px;
 }
-  
+
 .contactIcon {
     display: inline-block;
     width: 1em;
@@ -72,17 +72,17 @@ li {
     margin-right: 8px;
     vertical-align: middle;
 }
-  
+
 .website a {
     color: white;
     text-decoration: none;
     font-size: 14px;
 }
-  
+
 .website a:hover {
     text-decoration: underline;
 }
-  
+
 .skill-list li {
     background-color: #2e3b4e;
     color: white;
@@ -90,19 +90,20 @@ li {
     margin: 5px 0;
     border-radius: 4px;
 }
-  
+
 /* Education Details css */
 .education-details {
     font-size: 0.9em;
     color: white;
 }
-  
+
 /* Interactive Hover Effects */
-a:hover, button:hover {
+a:hover,
+button:hover {
     color: #ff6347;
     cursor: pointer;
 }
-  
+
 /* Job Section */
 .jobPosition {
     font-weight: bold;
@@ -117,7 +118,7 @@ a:hover, button:hover {
     margin-bottom: 5px;
     margin-top: 5px;
 }
-  
+
 .bottomLineSeparator {
     border-bottom: 1px solid white;
     margin-bottom: 20px;
@@ -129,36 +130,80 @@ a:hover, button:hover {
     align-items: center;
     margin: 5px 0;
 }
+
 .indented {
-    margin-left: 30px; 
+    margin-left: 30px;
 }
 
 /*--------------------------------------------------------*/
+/* Print style */
 
-                        /* Print style */
 @media print {
+
     /* Ensure the background color is included in the print */
-    body, .leftPanel, .rightPanel {
-        -webkit-print-color-adjust: exact;  /* Ensures background color appears in print */
+    body,
+    .leftPanel,
+    .rightPanel {
+        -webkit-print-color-adjust: exact;
+        /* Ensures background color appears in print */
         print-color-adjust: exact;
+    }
+
+    /* Ensure container behaves as a single block for print */
+    .container {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
     }
 
     /* Blue box on the left panel */
     .leftPanel {
-        background-color: #2e3b4e;  /* Blue color */
-        color: white;  /* White text */
+        background-color: #2e3b4e;
+        /* Blue color */
+        color: white;
+        /* White text */
+        width: 30%;
+        float: left;
+        padding: 10px;
+        page-break-inside: avoid;
+        /* Prevent it from splitting onto another page */
+        margin-right: 20px;
+        /* Provide some space on the right */
     }
+
+    /* Right Panel adjustments */
+    .rightPanel {
+        background-color: #ffffff;
+        /* Clean white background for the right panel */
+        color: black;
+        width: 65%;
+        float: left;
+        padding: 20px;
+        page-break-inside: avoid;
+        /* Prevent it from splitting onto another page */
+    }
+
+    /* Header */
     h1 {
-        font-size: 2.5em;  /* Ensure good legibility in print */
+        font-size: 2.5em;
+        /* Ensure good legibility in print */
     }
-    /* Adjusting print font size and other properties for readability */
-    h2, h3, li {
-        font-size: 12pt;  /* Ensure good legibility in print */
+
+    h2,
+    h3,
+    li {
+        font-size: 12pt;
+        /* Ensure good legibility in print */
     }
 
     /* Remove unnecessary styles for printing */
-    .website a, .contactIcon {
-        color: white; /* Ensure text remains readable */
+    .website a,
+    .contactIcon {
+        color: white;
+        /* Ensure text remains readable */
     }
 
     /* Ensuring text inside links remains readable */
@@ -167,25 +212,39 @@ a:hover, button:hover {
         text-decoration: none;
     }
 
-    /* Remove any unnecessary borders or box shadows in print */
-    .container {
-        box-shadow: none;
-        margin: 0;
-    }
-
-    .rightPanel {
-        background-color: #ffffff; /* Ensure a clean white background for the right panel */
-        color: black; /* Ensure text is readable */
-    }
-
-    /* Remove margins or paddings to optimize space for printing */
+    /* Adjusted margins for better printing */
     .indented {
         margin-left: 15px;
     }
+
+    /* Adjust QR Code Image size */
+    .qrImage {
+        width: 90px;
+        /* Adjust QR code size */
+        height: auto;
+        border-radius: 8px;
+    }
+
+    /* Force the content into a single page layout */
+    body {
+        margin: 0;
+        padding: 0;
+        page-break-before: always;
+        /* Ensures content starts at the top of the page */
+        max-width: 100%;
+    }
+
+    /* Prevent page breaks between sections */
+    section,
+    .item {
+        page-break-inside: avoid;
+    }
 }
+
 /* ---------------------------------------------------- */
-            /* Mobile Section */
+/* Mobile Section */
 @media screen and (max-width: 768px) {
+
     /* Container adjustments */
     .container {
         flex-direction: column-reverse;
@@ -211,7 +270,8 @@ a:hover, button:hover {
         font-size: 2em;
     }
 
-    h2, h3 {
+    h2,
+    h3 {
         font-size: 1.25em;
     }
 
@@ -229,7 +289,8 @@ a:hover, button:hover {
         font-size: 16px;
     }
 }
-/* ----------------------------------------------------*/   
+
+/* ----------------------------------------------------*/
 /* QR Code Styling */
 .qrCode {
     text-align: center;
@@ -238,7 +299,10 @@ a:hover, button:hover {
 }
 
 .qrImage {
-    width: 100px;  /* Adjust the width of the QR code */
-    height: auto;  /* Keep aspect ratio */
-    border-radius: 8px;  /* Optional: Rounded corners for the QR code */
+    width: 100px;
+    /* Adjust the width of the QR code */
+    height: auto;
+    /* Keep aspect ratio */
+    border-radius: 8px;
+    /* Optional: Rounded corners for the QR code */
 }
