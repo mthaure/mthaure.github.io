@@ -172,7 +172,6 @@ button:hover {
         height: auto;
         overflow: visible;
         page-break-inside: avoid;
-        padding-left: 20px; /* Allow space for print margins */
     }
 
     /* Prevent any page breaks within sections */
@@ -194,29 +193,11 @@ button:hover {
         font-size: 12px;
     }
 
-    /* Remove unnecessary borders and background colors */
-    .container, .leftPanel, .rightPanel {
-        box-shadow: none;
-        background-color: transparent;
-    }
-
-    /* Ensure no extra margin/padding */
-    .item, .jobPosition, .projectName {
-        margin: 0;
-        padding: 0;
-    }
-
     /* Handle the QR code to fit on the page */
     .qrImage {
         width: 50px; /* Resize to a smaller width for print */
         height: auto;
         margin: 0;
-    }
-
-    /* Prevent page breaks */
-    .leftPanel, .rightPanel {
-        page-break-before: avoid;
-        page-break-after: avoid;
     }
 }
 
