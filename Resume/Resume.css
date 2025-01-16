@@ -22,11 +22,13 @@ body {
 
 .leftPanel {
     width: 30%;
-    background-color: #2e3b4e; /* Solid background color */
+    background-color: #2e3b4e;
+    /* Solid background color */
     color: white;
     padding: 10px;
     box-sizing: border-box;
-    border: 2px solid #1e2a35; /* Solid border around the left panel */
+    border: 2px solid #1e2a35;
+    /* Solid border around the left panel */
 }
 
 .rightPanel {
@@ -139,6 +141,7 @@ button:hover {
 /* ---------------------------------------------------- */
 /* Print Styles */
 @media print {
+
     /* Set 0.5-inch margins for printing */
     @page {
         size: A4;
@@ -148,12 +151,12 @@ button:hover {
     /* General print adjustments */
     .container {
         display: flex;
-        flex-direction: row; 
+        flex-direction: row;
         width: 100%;
         max-width: 100%;
         margin: 0;
         padding: 0;
-        box-shadow: none; 
+        box-shadow: none;
     }
 
     .leftPanel {
@@ -163,22 +166,30 @@ button:hover {
         padding: 10px;
         box-sizing: border-box;
         -webkit-print-color-adjust: exact;
-        font-size: 11pt;  /* Slightly smaller text size */
+        /* Chrome, Safari */
+        -moz-print-color-adjust: exact;
+        /* Firefox */
+        print-color-adjust: exact;
+        font-size: 11pt;
+        /* Slightly smaller text size */
     }
 
     .rightPanel {
-        width: 70%; 
+        width: 70%;
         box-sizing: border-box;
-        font-size: 11pt; /* Slightly smaller text size */
+        font-size: 11pt;
+        /* Slightly smaller text size */
     }
 
     h1 {
-        font-size: 1.8em;  /* Adjust font size to fit */
+        font-size: 1.8em;
+        /* Adjust font size to fit */
         margin: 0 0 5px;
     }
 
     h2 {
-        font-size: 1.4em;  /* Adjust font size to fit */
+        font-size: 1.4em;
+        /* Adjust font size to fit */
         color: white;
         border-bottom: 1px solid white;
         padding-bottom: 1px;
@@ -213,7 +224,8 @@ button:hover {
     }
 
     .education-details {
-        font-size: 10pt;  /* Slightly smaller text size */
+        font-size: 10pt;
+        /* Slightly smaller text size */
     }
 
     /* Hide QR code during print */
@@ -267,7 +279,7 @@ button:hover {
         width: 100%;
         padding: 10px;
         text-align: center;
-        
+
     }
 
     /* Right Panel */
