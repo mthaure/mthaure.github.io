@@ -153,7 +153,7 @@ button:hover {
         max-width: 100%;
         margin: 0;
         padding: 0;
-        box-shadow: none; /* Remove shadow */
+        box-shadow: none; 
     }
 
     .leftPanel {
@@ -162,21 +162,23 @@ button:hover {
         color: white;
         padding: 10px;
         box-sizing: border-box;
-        -webkit-print-color-adjust: exact; /* Force printing of background color */
+        -webkit-print-color-adjust: exact;
+        font-size: 11pt;  /* Slightly smaller text size */
     }
 
     .rightPanel {
         width: 70%; 
         box-sizing: border-box;
+        font-size: 11pt; /* Slightly smaller text size */
     }
 
     h1 {
-        font-size: 1.9em;
-        margin: 0 0 10px;
+        font-size: 1.8em;  /* Adjust font size to fit */
+        margin: 0 0 5px;
     }
 
     h2 {
-        font-size: 1.5em;
+        font-size: 1.4em;  /* Adjust font size to fit */
         color: white;
         border-bottom: 1px solid white;
         padding-bottom: 1px;
@@ -184,7 +186,7 @@ button:hover {
     }
 
     h3 {
-        font-size: 1em;
+        font-size: 1.1em;
     }
 
     ul {
@@ -211,7 +213,7 @@ button:hover {
     }
 
     .education-details {
-        font-size: 11pt; 
+        font-size: 10pt;  /* Slightly smaller text size */
     }
 
     /* Hide QR code during print */
@@ -221,7 +223,7 @@ button:hover {
 
     .workExperience ul,
     .education-details ul {
-        padding-left: 20px;
+        padding-left: 10px;
     }
 
     .jobPosition {
@@ -241,6 +243,11 @@ button:hover {
     a:hover,
     button:hover {
         color: black;
+    }
+
+    /* Prevent page break inside the container */
+    .container {
+        page-break-inside: avoid;
     }
 }
 
