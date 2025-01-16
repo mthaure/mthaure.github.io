@@ -17,15 +17,16 @@ body {
     max-width: 1200px;
     min-height: 100vh;
     flex-wrap: nowrap;
-    box-shadow: 0 0 10px rgba(238, 10, 150, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .leftPanel {
     width: 30%;
-    background-color: #2e3b4e;
+    background-color: #2e3b4e; /* Solid background color */
     color: white;
     padding: 10px;
     box-sizing: border-box;
+    border: 2px solid #1e2a35; /* Solid border around the left panel */
 }
 
 .rightPanel {
@@ -37,7 +38,7 @@ body {
 
 h1 {
     font-family: 'Julius Sans One', sans-serif;
-    font-size: 2.5em;
+    font-size: 2em;
     margin: 0 0 10px;
     color: black;
 }
@@ -91,7 +92,7 @@ li {
     border-radius: 4px;
 }
 
-/* Education Details css */
+/* Education Details */
 .education-details {
     font-size: 0.9em;
     color: white;
@@ -136,71 +137,110 @@ button:hover {
 }
 
 /* ---------------------------------------------------- */
-/* Print styles */
+/* Print Styles */
 @media print {
-    /* Make sure the body content is on one page */
-    body {
-        font-family: 'Open Sans', sans-serif;
-        line-height: 1;
+    /* Set 0.5-inch margins for printing */
+    @page {
+        size: A4;
+        margin: 0.4in;
+    }
+
+    /* General print adjustments */
+    .container {
+        display: flex;
+        flex-direction: row; 
+        width: 100%;
+        max-width: 100%;
         margin: 0;
         padding: 0;
-        background-color: White;
-        color: Black;
-        display: flex;
-        justify-content: center;
+        box-shadow: none; /* Remove shadow */
     }
 
-    /* Ensure the container doesn't overflow */
-    .container {
-        max-width: 100%;
-        width: 100%;
-        height: 100%;
-        display: block;
-        page-break-inside: avoid;
-    }
-
-    /* Prevent left panel from overflowing */
     .leftPanel {
         width: 30%;
         background-color: #2e3b4e;
         color: white;
-        height: auto;
-        overflow: visible;
-        page-break-inside: avoid;
+        padding: 10px;
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact; /* Force printing of background color */
     }
 
-    /* Prevent right panel from overflowing */
     .rightPanel {
-        width: 70%;
-        height: auto;
-        overflow: visible;
-        page-break-inside: avoid;
+        width: 70%; 
+        box-sizing: border-box;
     }
 
-    /* Prevent any page breaks within sections */
-    section, .workExperience, .details {
-        page-break-inside: avoid;
-    }
-
-    /* Adjust fonts for printing */
     h1 {
-        font-size: 2em;
-        margin: 0;
+        font-size: 1.9em;
+        margin: 0 0 10px;
     }
 
-    h2, h3 {
-        font-size: 1.25em;
+    h2 {
+        font-size: 1.5em;
+        color: white;
+        border-bottom: 1px solid white;
+        padding-bottom: 1px;
+        margin-bottom: 1px;
+    }
+
+    h3 {
+        font-size: 1em;
+    }
+
+    ul {
+        list-style-type: disc;
+        padding-left: 10px;
     }
 
     li {
-        font-size: 12px;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 
-    /* Handle the QR code to fit on the page */
-    .qrImage {
-        width: 50px; /* Resize to a smaller width for print */
-        height: auto;
-        margin: 0;
+    /* Contact section and skills */
+    .website a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .skill-list li {
+        color: white;
+        padding: 5px 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+    }
+
+    .education-details {
+        font-size: 11pt; 
+    }
+
+    /* Hide QR code during print */
+    .qrCode {
+        display: none;
+    }
+
+    .workExperience ul,
+    .education-details ul {
+        padding-left: 20px;
+    }
+
+    .jobPosition {
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .projectName {
+        font-style: italic;
+        font-size: 14px;
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+
+    a:hover,
+    button:hover {
+        color: black;
     }
 }
 
@@ -220,6 +260,7 @@ button:hover {
         width: 100%;
         padding: 10px;
         text-align: center;
+        
     }
 
     /* Right Panel */
