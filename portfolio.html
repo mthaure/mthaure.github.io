@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Room · Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;700;900&display=swap');
+
+  :root {
+    --orange: #FF6B2B;
+    --blue: #4A90D9;
+    --teal: #2ECFB1;
+    --pink: #FF4FA3;
+    --yellow: #FFD93D;
+    --dark: #1a1a2e;
+    --cream: #f5f0e8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  #cursor {
+    position: fixed;
+    width: 20px; height: 20px;
+    border: 3px solid var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+  }
+  #cursor.hovering {
+    width: 40px; height: 40px;
+    background: rgba(255,107,43,0.2);
+    border-color: var(--yellow);
+  }
+
+  /* Canvas */
+  #scene {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  /* Top bar */
+  #topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 36px;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba(26,26,46,0.9), transparent);
+  }
+  #topbar .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--cream);
+    letter-spacing: 2px;
+  }
+  #topbar .logo span { color: var(--orange); }
+  #topbar .hint {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed;
+    background: var(--dark);
+    border: 2px solid var(--orange);
+    color: var(--cream);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+  }
+  #tooltip.visible { opacity: 1; transform: translateY(0); }
+
+  /* Modal overlay */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,20,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s;
+  }
+  #overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    width: min(680px, 92vw);
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 48px;
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    scrollbar-width: thin;
+  }
+  #overlay.open .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px; right: 22px;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+  .modal-close:hover { transform: rotate(90deg); }
+
+  .modal-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  .modal h2 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .modal p {
+    font-size: 1rem;
+    line-height: 1.75;
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 22px;
+  }
+  .card {
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .card strong {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  /* Page themes */
+  .theme-orange { background: linear-gradient(135deg, #FF6B2B 0%, #FF9A5C 100%); color: #1a0a00; }
+  .theme-blue   { background: linear-gradient(135deg, #1a1a4e 0%, #2a3a7e 100%); color: #e8f0ff; }
+  .theme-teal   { background: linear-gradient(135deg, #0a2a26 0%, #1a4a44 100%); color: #e0fff8; }
+  .theme-pink   { background: linear-gradient(135deg, #3a0a2a 0%, #5a1a4a 100%); color: #ffe0f0; }
+
+  .theme-orange .modal-close { color: #1a0a00; }
+  .theme-blue   .modal-close { color: #aac4ff; }
+  .theme-teal   .modal-close { color: #80ffea; }
+  .theme-pink   .modal-close { color: #ffaadd; }
+
+  .theme-orange .modal-tag { background: rgba(0,0,0,0.15); color: #1a0a00; }
+  .theme-blue   .modal-tag { background: rgba(255,255,255,0.1); color: #aac4ff; }
+  .theme-teal   .modal-tag { background: rgba(255,255,255,0.1); color: #80ffea; }
+  .theme-pink   .modal-tag { background: rgba(255,255,255,0.1); color: #ffaadd; }
+
+  .theme-orange .card { background: rgba(0,0,0,0.12); }
+  .theme-blue   .card { background: rgba(255,255,255,0.07); }
+  .theme-teal   .card { background: rgba(255,255,255,0.07); }
+  .theme-pink   .card { background: rgba(255,255,255,0.07); }
+
+  .skill-list {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px;
+  }
+  .skill-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .theme-orange .skill-pill { background: rgba(0,0,0,0.15); }
+  .theme-blue   .skill-pill { background: rgba(255,255,255,0.12); }
+  .theme-teal   .skill-pill { background: rgba(46,207,177,0.2); }
+  .theme-pink   .skill-pill { background: rgba(255,79,163,0.2); }
+
+  /* Intro splash */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: opacity 0.8s, pointer-events 0.8s;
+  }
+  #intro h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--cream);
+    text-align: center;
+  }
+  #intro h1 span { color: var(--orange); }
+  #intro p {
+    color: rgba(245,240,232,0.5);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  #intro .enter-btn {
+    margin-top: 28px;
+    padding: 14px 40px;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 0 0 rgba(255,107,43,0.5);
+    animation: glow 2s infinite;
+  }
+  @keyframes glow {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,107,43,0.5); }
+    50% { box-shadow: 0 0 0 16px rgba(255,107,43,0); }
+  }
+  #intro .enter-btn:hover { transform: scale(1.06); }
+  #intro.hidden { opacity: 0; pointer-events: none; }
+
+  /* Room label badges */
+  .room-label {
+    position: fixed;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<div id="intro">
+  <h1>Welcome to<br/><span>My Room</span></h1>
+  <p>An interactive portfolio</p>
+  <button class="enter-btn" onclick="enterRoom()">Enter Room →</button>
+</div>
+
+<div id="topbar">
+  <div class="logo">[ <span>MY</span> ROOM ]</div>
+  <div class="hint">click objects to explore</div>
+</div>
+
+<canvas id="scene"></canvas>
+<div id="tooltip"></div>
+
+<!-- OVERLAY MODAL -->
+<div id="overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ─── CURSOR ───────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+// ─── MODAL DATA ───────────────────────────────────────────────────────────
+const pages = {
+  monitors: {
+    theme: 'theme-blue',
+    tag: '💻 Projects & Portfolio',
+    title: 'Things I\'ve Built',
+    content: `
+      <p>From full-stack web apps to Linux configs and custom scripts — here's what I've been building.</p>
+      <div class="card-grid">
+        <div class="card">
+          <strong>🌐 Project One</strong>
+          A full-stack web application built with React & Node.js. Deployed on Linux server.
+        </div>
+        <div class="card">
+          <strong>🐧 Linux Setup</strong>
+          Custom Arch Linux rice with tiling WM, dotfiles, and shell scripts for productivity.
+        </div>
+        <div class="card">
+          <strong>📊 Data Dashboard</strong>
+          Python + D3.js visualization tool for personal analytics and tracking.
+        </div>
+        <div class="card">
+          <strong>🎮 Game Mod</strong>
+          Custom Dota 2 tools and overlay built for personal use and friends.
+        </div>
+      </div>
+      <div class="skill-list">
+        <span class="skill-pill">React</span>
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">Linux</span>
+        <span class="skill-pill">Node.js</span>
+        <span class="skill-pill">Three.js</span>
+        <span class="skill-pill">Blender</span>
+      </div>
+    `
+  },
+  bike: {
+    theme: 'theme-orange',
+    tag: '🚲 Hobbies & Interests',
+    title: 'Life Outside the Screen',
+    content: `
+      <p>When I'm not at my desk, I'm out on the road. Cycling is my reset button — long rides, early mornings, empty roads.</p>
+      <div class="card-grid">
+        <div class="card">
+          <strong>🚴 Road Cycling</strong>
+          Weekend rides, hill climbs, and the occasional century ride. Orange is the only colour for a bike.
+        </div>
+        <div class="card">
+          <strong>🎮 Dota 2</strong>
+          Thousands of hours deep. Love the strategy, the chaos, and the occasional miraculous comeback.
+        </div>
+        <div class="card">
+          <strong>🐱 Cat Dad</strong>
+          My cat has their own cat tree (obviously). They judge my code from a height.
+        </div>
+        <div class="card">
+          <strong>🎨 3D Art</strong>
+          Learning Blender to build little worlds — like this room you're standing in right now.
+        </div>
+      </div>
+    `
+  },
+  certificates: {
+    theme: 'theme-teal',
+    tag: '📜 Work & Career',
+    title: 'Where I\'ve Been',
+    content: `
+      <p>I've worked across tech and creative fields, always drawn to work that sits at the intersection of design and engineering.</p>
+      <div class="card-grid">
+        <div class="card">
+          <strong>🏢 Current Role</strong>
+          Working in tech, solving real problems with code and creativity.
+        </div>
+        <div class="card">
+          <strong>🎓 Education</strong>
+          Computer Science background with a passion for self-directed learning.
+        </div>
+        <div class="card">
+          <strong>🏆 Certification</strong>
+          Certified in cloud platforms and modern web development practices.
+        </div>
+        <div class="card">
+          <strong>🌱 Currently Learning</strong>
+          3D development, WebGL, and advanced Blender workflows.
+        </div>
+      </div>
+      <div class="skill-list">
+        <span class="skill-pill">Full Stack Dev</span>
+        <span class="skill-pill">Cloud</span>
+        <span class="skill-pill">UI/UX</span>
+        <span class="skill-pill">3D Design</span>
+      </div>
+    `
+  },
+  cat: {
+    theme: 'theme-pink',
+    tag: '😺 About Me',
+    title: 'Hey, I\'m [Your Name]',
+    content: `
+      <p>I'm a developer, cyclist, and cat person living my best life in a room I designed myself — in Blender, obviously.</p>
+      <p>I love building things that feel alive: interactive websites, 3D environments, tools that people actually enjoy using.</p>
+      <p>My setup is my happy place: dual monitors, a Linux machine, an orange bike leaning against the wall, and a cat judging everything from above.</p>
+      <div class="card-grid">
+        <div class="card">
+          <strong>📍 Based In</strong>
+          Somewhere with good cycling routes and fast internet.
+        </div>
+        <div class="card">
+          <strong>🐧 Daily Driver</strong>
+          Linux. Always Linux. The Tux poster on my wall is non-negotiable.
+        </div>
+        <div class="card">
+          <strong>☕ Fuel</strong>
+          Coffee in the morning, Dota at night, cycling in between.
+        </div>
+        <div class="card">
+          <strong>📬 Get In Touch</strong>
+          hello@yourname.com
+        </div>
+      </div>
+    `
+  }
+};
+
+// ─── THREE.JS SCENE ───────────────────────────────────────────────────────
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+scene.fog = new THREE.Fog(0x1a1a2e, 18, 30);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 4.5, 11);
+camera.lookAt(0, 1.5, 0);
+
+// Lights
+const ambient = new THREE.AmbientLight(0xffeedd, 0.6);
+scene.add(ambient);
+
+const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
+sun.position.set(5, 10, 6);
+sun.castShadow = true;
+sun.shadow.mapSize.width = 2048;
+sun.shadow.mapSize.height = 2048;
+scene.add(sun);
+
+const fillLight = new THREE.PointLight(0x4A90D9, 1.5, 12);
+fillLight.position.set(-4, 4, 2);
+scene.add(fillLight);
+
+const deskLight = new THREE.PointLight(0xFF6B2B, 1.0, 6);
+deskLight.position.set(3, 3, 1);
+scene.add(deskLight);
+
+// Helpers
+function box(w,h,d, color, x,y,z, rx=0,ry=0,rz=0) {
+  const g = new THREE.BoxGeometry(w,h,d);
+  const m = new THREE.MeshLambertMaterial({ color });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.position.set(x,y,z);
+  mesh.rotation.set(rx,ry,rz);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+  return mesh;
+}
+function cyl(rt,rb,h,seg,color,x,y,z) {
+  const g = new THREE.CylinderGeometry(rt,rb,h,seg);
+  const m = new THREE.MeshLambertMaterial({ color });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.position.set(x,y,z);
+  mesh.castShadow = true;
+  scene.add(mesh);
+  return mesh;
+}
+
+// ── ROOM ──
+// Floor
+const floor = box(14,0.2,10, 0x1a1a3e, 0,-0.1,0);
+floor.receiveShadow = true;
+// Rug
+box(6,0.05,5, 0x2a2a5e, 0,0.02,1);
+// Back wall
+box(14,8,0.2, 0xd4c9b8, 0,3.5,-5);
+// Left wall
+box(0.2,8,10, 0xc8bfaf, -7,3.5,0);
+// Right wall
+box(0.2,8,10, 0xd0c7b5, 7,3.5,0);
+
+// ── PIPES (ceiling) ──
+box(10,0.18,0.18, 0x444455, -1,7,-3, 0,0,0);
+box(0.18,2,0.18, 0x444455, -5,6.1,-3, 0,0,0);
+box(5,0.18,0.18, 0x444455, 3.5,7,1, 0,Math.PI/2,0);
+
+// ── DESK ──
+const desk = box(4,0.12,1.8, 0xc0601a, 3,1.55,0.5);
+box(0.1,1.55,0.1, 0xa04010, 1.1,0.77,1.3);
+box(0.1,1.55,0.1, 0xa04010, 4.9,0.77,1.3);
+box(0.1,1.55,0.1, 0xa04010, 1.1,0.77,-0.3);
+box(0.1,1.55,0.1, 0xa04010, 4.9,0.77,-0.3);
+
+// ── PC TOWER (on desk) ──
+box(0.5,1.1,0.9, 0x222233, 1.5,2.2,0.3);
+box(0.42,0.06,0.82, 0x333344, 1.5,2.76,0.3);
+// PC on floor
+box(0.55,1.3,0.9, 0x222233, 5.8,0.75,0.5);
+
+// ── MONITORS (clickable) ──
+const monitorGroup = new THREE.Group();
+// Monitor 1
+const mon1Screen = new THREE.Mesh(
+  new THREE.BoxGeometry(1.4,0.9,0.07),
+  new THREE.MeshLambertMaterial({ color: 0x2255aa, emissive: 0x1133aa, emissiveIntensity: 0.4 })
+);
+mon1Screen.position.set(2.6, 2.55, 0.2);
+const mon1Stand = box(0.1,0.3,0.1, 0x444455, 2.6,2.0,0.2);
+const mon1Base = box(0.5,0.04,0.3, 0x444455, 2.6,1.85,0.2);
+// Monitor 2
+const mon2Screen = new THREE.Mesh(
+  new THREE.BoxGeometry(1.4,0.9,0.07),
+  new THREE.MeshLambertMaterial({ color: 0x2255aa, emissive: 0x1133aa, emissiveIntensity: 0.4 })
+);
+mon2Screen.position.set(4.2, 2.55, 0.2);
+const mon2Stand = box(0.1,0.3,0.1, 0x444455, 4.2,2.0,0.2);
+const mon2Base = box(0.5,0.04,0.3, 0x444455, 4.2,1.85,0.2);
+
+mon1Screen.castShadow = true;
+mon2Screen.castShadow = true;
+scene.add(mon1Screen);
+scene.add(mon2Screen);
+monitorGroup.add(mon1Screen, mon2Screen);
+monitorGroup.userData = { id: 'monitors', label: '💻 Projects & Portfolio' };
+scene.add(monitorGroup);
+
+// Keyboard
+box(1.1,0.04,0.4, 0x333344, 3.1,1.64,0.8);
+
+// ── CERTIFICATES ──
+const certGroup = new THREE.Group();
+const cert1 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.8,0.6,0.04),
+  new THREE.MeshLambertMaterial({ color: 0xf5f0d8 })
+);
+cert1.position.set(5.5,3.2,-4.93);
+const cert2 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.7,0.55,0.04),
+  new THREE.MeshLambertMaterial({ color: 0xf0edd0 })
+);
+cert2.position.set(6.3,2.6,-4.93);
+// frames
+const frame1 = new THREE.Mesh(new THREE.BoxGeometry(0.88,0.68,0.03), new THREE.MeshLambertMaterial({ color: 0x5c3a1a }));
+frame1.position.set(5.5,3.2,-4.96);
+const frame2 = new THREE.Mesh(new THREE.BoxGeometry(0.78,0.63,0.03), new THREE.MeshLambertMaterial({ color: 0x4a2e12 }));
+frame2.position.set(6.3,2.6,-4.96);
+scene.add(cert1, cert2, frame1, frame2);
+certGroup.add(cert1, cert2);
+certGroup.userData = { id: 'certificates', label: '📜 Work & Career' };
+scene.add(certGroup);
+
+// ── BIKE (clickable) ──
+const bikeGroup = new THREE.Group();
+
+// Wheels
+function wheel(x,y,z) {
+  const wg = new THREE.TorusGeometry(0.7,0.07,8,20);
+  const wm = new THREE.MeshLambertMaterial({ color: 0x111111 });
+  const w = new THREE.Mesh(wg, wm);
+  w.rotation.y = Math.PI/2;
+  w.position.set(x,y,z);
+  w.castShadow = true;
+  bikeGroup.add(w);
+  // spokes
+  for(let i=0;i<6;i++) {
+    const sg = new THREE.CylinderGeometry(0.015,0.015,1.3,4);
+    const sm = new THREE.MeshLambertMaterial({ color: 0x888899 });
+    const s = new THREE.Mesh(sg, sm);
+    s.rotation.z = (Math.PI/6)*i;
+    s.position.set(x,y,z);
+    bikeGroup.add(s);
+  }
+}
+wheel(-2.5,0.75,0);
+wheel(-0.8,0.75,0);
+
+// Frame tubes
+function tube(x1,y1,x2,y2,color=0xFF6B2B) {
+  const dx=x2-x1, dy=y2-y1;
+  const len=Math.sqrt(dx*dx+dy*dy);
+  const g=new THREE.CylinderGeometry(0.055,0.055,len,6);
+  const m=new THREE.MeshLambertMaterial({color});
+  const mesh=new THREE.Mesh(g,m);
+  mesh.position.set((x1+x2)/2,(y1+y2)/2,0);
+  mesh.rotation.z=Math.atan2(dx,dy);
+  mesh.castShadow=true;
+  bikeGroup.add(mesh);
+}
+tube(-2.5,0.75,-1.65,0.75); // bottom
+tube(-2.5,0.75,-1.9,1.9);   // seat stay
+tube(-1.65,0.75,-1.9,1.9);  // seat tube
+tube(-0.8,0.75,-1.65,0.75); // chain
+tube(-0.8,0.75,-1.2,1.75);  // fork
+tube(-1.65,0.75,-1.2,1.75); // top tube
+
+// Seat
+const seatG = new THREE.BoxGeometry(0.45,0.07,0.15);
+const seatM = new THREE.MeshLambertMaterial({ color: 0x111111 });
+const seat = new THREE.Mesh(seatG, seatM);
+seat.position.set(-1.9,2.0,0);
+bikeGroup.add(seat);
+
+// Handlebars
+const hb = new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.5,6), new THREE.MeshLambertMaterial({color:0x444455}));
+hb.rotation.z = Math.PI/2;
+hb.position.set(-1.05,2.0,0);
+bikeGroup.add(hb);
+
+bikeGroup.position.set(-1,0.05,0.5);
+bikeGroup.rotation.y = 0.25;
+bikeGroup.userData = { id: 'bike', label: '🚲 Hobbies & Interests' };
+scene.add(bikeGroup);
+
+// Bike lean (against wall)
+bikeGroup.rotation.z = 0.12;
+
+// ── CAT TREE ──
+const catGroup = new THREE.Group();
+// Base
+const ctBase = new THREE.Mesh(new THREE.BoxGeometry(1.1,0.1,0.8), new THREE.MeshLambertMaterial({color:0x2255aa}));
+ctBase.position.set(0.5,1.62,-0.2);
+// Post
+const ctPost = new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,1.0,8), new THREE.MeshLambertMaterial({color:0xd4aa55}));
+ctPost.position.set(0.5,2.12,-0.2);
+// Top platform
+const ctTop = new THREE.Mesh(new THREE.BoxGeometry(0.9,0.1,0.7), new THREE.MeshLambertMaterial({color:0x2255aa}));
+ctTop.position.set(0.5,2.65,-0.2);
+scene.add(ctBase, ctPost, ctTop);
+
+// Cat (on top)
+const catBody = new THREE.Mesh(new THREE.BoxGeometry(0.35,0.22,0.3), new THREE.MeshLambertMaterial({color:0x888899}));
+catBody.position.set(0.5,2.82,-0.2);
+const catHead = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.2,0.22), new THREE.MeshLambertMaterial({color:0x888899}));
+catHead.position.set(0.5,2.99,-0.05);
+// Ears
+const earL = new THREE.Mesh(new THREE.ConeGeometry(0.06,0.1,4), new THREE.MeshLambertMaterial({color:0x777788}));
+earL.position.set(0.38,3.1,-0.05);
+const earR = new THREE.Mesh(new THREE.ConeGeometry(0.06,0.1,4), new THREE.MeshLambertMaterial({color:0x777788}));
+earR.position.set(0.62,3.1,-0.05);
+scene.add(catBody, catHead, earL, earR);
+catGroup.add(catBody, catHead, earL, earR);
+catGroup.userData = { id: 'cat', label: '😺 About Me' };
+scene.add(catGroup);
+
+// Owl on top of cat tree
+const owlBody = new THREE.Mesh(new THREE.CylinderGeometry(0.1,0.12,0.25,8), new THREE.MeshLambertMaterial({color:0x888877}));
+owlBody.position.set(0.5,2.82,0.3);
+const owlHead = new THREE.Mesh(new THREE.SphereGeometry(0.1,8,8), new THREE.MeshLambertMaterial({color:0x999988}));
+owlHead.position.set(0.5,2.98,0.3);
+scene.add(owlBody, owlHead);
+
+// ── DOTA POSTER ──
+const dotaPoster = new THREE.Mesh(
+  new THREE.BoxGeometry(1.0,1.0,0.04),
+  new THREE.MeshLambertMaterial({ color: 0xcc1111 })
+);
+dotaPoster.position.set(-3.5,3.5,-4.93);
+// Dota logo shape (simplified diamond)
+const dotaLogo = new THREE.Mesh(
+  new THREE.BoxGeometry(0.55,0.55,0.05),
+  new THREE.MeshLambertMaterial({ color: 0xeeeeee })
+);
+dotaLogo.rotation.z = Math.PI/4;
+dotaLogo.position.set(-3.5,3.5,-4.9);
+scene.add(dotaPoster, dotaLogo);
+
+// ── LINUX POSTER ──
+const linuxPoster = new THREE.Mesh(
+  new THREE.BoxGeometry(0.85,1.0,0.04),
+  new THREE.MeshLambertMaterial({ color: 0x3366cc })
+);
+linuxPoster.position.set(0.8,3.5,-4.93);
+const tux = new THREE.Mesh(new THREE.SphereGeometry(0.2,8,8), new THREE.MeshLambertMaterial({color:0x111111}));
+tux.position.set(0.8,3.5,-4.88);
+const tuxBelly = new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8), new THREE.MeshLambertMaterial({color:0xffffff}));
+tuxBelly.position.set(0.8,3.35,-4.86);
+scene.add(linuxPoster, tux, tuxBelly);
+
+// ── BOOKSHELF ──
+box(1.2,0.1,0.4, 0x5c3a1a, -5.5,2.6,-0.5);
+box(0.1,1.5,0.4, 0x5c3a1a, -5.0,1.95,-0.5);
+box(0.1,1.5,0.4, 0x5c3a1a, -6.0,1.95,-0.5);
+// Books
+const bookColors = [0xcc3333, 0x3355cc, 0x33aa55, 0xcc8822, 0x882299];
+bookColors.forEach((c,i) => {
+  box(0.12,0.6,0.3, c, -5.85+i*0.2,2.4,-0.5);
+});
+
+// ── CLICKABLE OBJECTS REGISTRY ──
+const clickables = [
+  { group: monitorGroup, meshes: [mon1Screen, mon2Screen] },
+  { group: bikeGroup,    meshes: bikeGroup.children },
+  { group: certGroup,    meshes: [cert1, cert2, frame1, frame2] },
+  { group: catGroup,     meshes: [catBody, catHead, earL, earR] },
+];
+
+// ─── RAYCASTING / HOVER ───────────────────────────────────────────────────
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const tooltip = document.getElementById('tooltip');
+let hoveredGroup = null;
+let originalColors = new Map();
+
+function getAllMeshes(group) {
+  const meshes = [];
+  group.traverse(o => { if(o.isMesh) meshes.push(o); });
+  return meshes;
+}
+
+function highlightGroup(group, on) {
+  getAllMeshes(group).forEach(m => {
+    if(on) {
+      if(!originalColors.has(m.uuid)) originalColors.set(m.uuid, m.material.emissive.clone());
+      m.material.emissive.set(0xffff00);
+      m.material.emissiveIntensity = 0.25;
+    } else {
+      const orig = originalColors.get(m.uuid);
+      if(orig) m.material.emissive.copy(orig);
+      else m.material.emissive.set(0x000000);
+      m.material.emissiveIntensity = m === mon1Screen || m === mon2Screen ? 0.4 : 0;
+    }
+  });
+}
+
+document.addEventListener('mousemove', e => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const allMeshes = clickables.flatMap(c => getAllMeshes(c.group));
+  const intersects = raycaster.intersectObjects(allMeshes);
+
+  let found = null;
+  if(intersects.length > 0) {
+    const hit = intersects[0].object;
+    for(const c of clickables) {
+      if(getAllMeshes(c.group).includes(hit)) { found = c.group; break; }
+    }
+  }
+
+  if(found !== hoveredGroup) {
+    if(hoveredGroup) highlightGroup(hoveredGroup, false);
+    hoveredGroup = found;
+    if(hoveredGroup) highlightGroup(hoveredGroup, true);
+  }
+
+  if(hoveredGroup) {
+    cursor.classList.add('hovering');
+    tooltip.textContent = hoveredGroup.userData.label;
+    tooltip.style.left = (e.clientX + 18) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+    tooltip.classList.add('visible');
+  } else {
+    cursor.classList.remove('hovering');
+    tooltip.classList.remove('visible');
+  }
+});
+
+// ─── CLICK → OPEN MODAL ───────────────────────────────────────────────────
+document.addEventListener('click', e => {
+  if(e.target.classList.contains('modal-close') || e.target.id === 'overlay') {
+    closeModal(); return;
+  }
+  if(!hoveredGroup) return;
+  const id = hoveredGroup.userData.id;
+  const page = pages[id];
+  if(!page) return;
+  openModal(page);
+});
+
+const overlay = document.getElementById('overlay');
+const modalContent = document.getElementById('modal-content');
+
+function openModal(page) {
+  modalContent.className = `modal ${page.theme}`;
+  modalContent.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag">${page.tag}</div>
+    <h2>${page.title}</h2>
+    ${page.content}
+  `;
+  overlay.classList.add('open');
+}
+function closeModal() {
+  overlay.classList.remove('open');
+}
+overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
+
+// ─── ANIMATION ────────────────────────────────────────────────────────────
+let time = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  time += 0.01;
+
+  // Gentle camera bob
+  camera.position.y = 4.5 + Math.sin(time * 0.4) * 0.04;
+
+  // Monitor glow pulse
+  const glow = 0.35 + Math.sin(time * 1.5) * 0.12;
+  mon1Screen.material.emissiveIntensity = glow;
+  mon2Screen.material.emissiveIntensity = glow;
+
+  // Cat ear wiggle
+  earL.rotation.z = Math.sin(time * 1.2) * 0.08;
+  earR.rotation.z = Math.sin(time * 1.2 + 0.5) * 0.08;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// ─── RESIZE ───────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─── INTRO ────────────────────────────────────────────────────────────────
+function enterRoom() {
+  document.getElementById('intro').classList.add('hidden');
+}
+</script>
+</body>
+</html>
