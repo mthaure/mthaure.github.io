@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Room · Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;700;900&display=swap');
+
+  :root {
+    --orange: #FF6B2B;
+    --blue: #4A90D9;
+    --teal: #2ECFB1;
+    --pink: #FF4FA3;
+    --yellow: #FFD93D;
+    --dark: #1a1a2e;
+    --cream: #f5f0e8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    cursor: none;
+  }
+
+  #cursor {
+    position: fixed;
+    width: 20px; height: 20px;
+    border: 3px solid var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+  }
+  #cursor.hovering {
+    width: 40px; height: 40px;
+    background: rgba(255,107,43,0.2);
+    border-color: var(--yellow);
+  }
+
+  #scene {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  #topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 36px;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba(26,26,46,0.9), transparent);
+  }
+  #topbar .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--cream);
+    letter-spacing: 2px;
+  }
+  #topbar .logo span { color: var(--orange); }
+  #topbar .hint {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  #tooltip {
+    position: fixed;
+    background: var(--dark);
+    border: 2px solid var(--orange);
+    color: var(--cream);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+  }
+  #tooltip.visible { opacity: 1; transform: translateY(0); }
+
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,20,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s;
+  }
+  #overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    width: min(680px, 92vw);
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 48px;
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    scrollbar-width: thin;
+  }
+  #overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-close {
+    position: absolute;
+    top: 18px; right: 22px;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+  .modal-close:hover { transform: rotate(90deg); }
+
+  .modal-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  .modal h2 { font-size: 2.4rem; font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+  .modal p { font-size: 1rem; line-height: 1.75; opacity: 0.85; margin-bottom: 14px; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+  .card { border-radius: 12px; padding: 18px; font-size: 0.88rem; line-height: 1.5; }
+  .card strong { display: block; font-size: 1rem; margin-bottom: 4px; }
+
+  .theme-orange { background: linear-gradient(135deg, #FF6B2B 0%, #FF9A5C 100%); color: #1a0a00; }
+  .theme-blue   { background: linear-gradient(135deg, #1a1a4e 0%, #2a3a7e 100%); color: #e8f0ff; }
+  .theme-teal   { background: linear-gradient(135deg, #0a2a26 0%, #1a4a44 100%); color: #e0fff8; }
+  .theme-pink   { background: linear-gradient(135deg, #3a0a2a 0%, #5a1a4a 100%); color: #ffe0f0; }
+
+  .theme-orange .modal-close { color: #1a0a00; }
+  .theme-blue   .modal-close { color: #aac4ff; }
+  .theme-teal   .modal-close { color: #80ffea; }
+  .theme-pink   .modal-close { color: #ffaadd; }
+
+  .theme-orange .modal-tag { background: rgba(0,0,0,0.15); color: #1a0a00; }
+  .theme-blue   .modal-tag { background: rgba(255,255,255,0.1); color: #aac4ff; }
+  .theme-teal   .modal-tag { background: rgba(255,255,255,0.1); color: #80ffea; }
+  .theme-pink   .modal-tag { background: rgba(255,255,255,0.1); color: #ffaadd; }
+
+  .theme-orange .card { background: rgba(0,0,0,0.12); }
+  .theme-blue   .card { background: rgba(255,255,255,0.07); }
+  .theme-teal   .card { background: rgba(255,255,255,0.07); }
+  .theme-pink   .card { background: rgba(255,255,255,0.07); }
+
+  .skill-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .skill-pill { padding: 5px 14px; border-radius: 20px; font-size: 0.78rem; font-family: 'Space Mono', monospace; }
+  .theme-orange .skill-pill { background: rgba(0,0,0,0.15); }
+  .theme-blue   .skill-pill { background: rgba(255,255,255,0.12); }
+  .theme-teal   .skill-pill { background: rgba(46,207,177,0.2); }
+  .theme-pink   .skill-pill { background: rgba(255,79,163,0.2); }
+
+  /* ── Splash / Loading Screen ──────────────────────────────── */
+  #loading {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease;
+  }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+
+  #loading::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,107,43,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,107,43,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: grid-drift 20s linear infinite;
+  }
+  @keyframes grid-drift {
+    from { background-position: 0 0; }
+    to   { background-position: 60px 60px; }
+  }
+
+  #loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, var(--dark) 100%);
+    pointer-events: none;
+  }
+
+  #splash-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  #splash-name {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    letter-spacing: -1px;
+    opacity: 0;
+    animation: fade-up 0.8s ease 0.6s forwards;
+  }
+  #splash-name span { color: var(--orange); }
+
+  #splash-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    margin-top: 6px;
+    opacity: 0;
+    animation: fade-up 0.8s ease 0.9s forwards;
+  }
+
+  #splash-divider {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--orange), transparent);
+    margin: 28px 0 32px;
+    animation: expand-line 0.8s ease 1.1s forwards;
+  }
+  @keyframes expand-line { to { width: 280px; } }
+
+  #splash-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fade-up 0.6s ease 1.3s forwards;
+  }
+
+  #progress-bar-wrap {
+    width: 220px;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  #progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--orange);
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  #progress-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 2px;
+  }
+
+  #enter-btn {
+    display: none;
+    position: relative;
+    margin-top: 8px;
+    padding: 14px 44px;
+    background: transparent;
+    border: 2px solid var(--orange);
+    border-radius: 4px;
+    color: var(--cream);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color 0.3s, border-color 0.3s;
+    animation: fade-up 0.6s ease forwards;
+  }
+  #enter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+  }
+  #enter-btn:hover::before { transform: scaleX(1); }
+  #enter-btn:hover { color: #1a0a00; }
+  #enter-btn span { position: relative; z-index: 1; }
+
+  #error-msg {
+    display: none;
+    background: rgba(255,50,50,0.15);
+    border: 1px solid rgba(255,50,50,0.4);
+    color: #ffaaaa;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    max-width: 400px;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<div id="loading">
+  <div id="splash-inner">
+    <div id="splash-name"> <span>Michael</span> Thaure </div>
+    <div id="splash-sub">Information Technology · Systems Engineer · Developer</div>
+    <div id="splash-divider"></div>
+    <div id="splash-progress">
+      <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+      <div id="progress-text">loading room...</div>
+    </div>
+    <button id="enter-btn"><span>↳ enter </span></button>
+    <div id="error-msg"></div>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="logo">[ <span>Michael</span> Thaure ]</div>
+  <div class="hint">click objects to explore ↓</div>
+</div>
+
+<canvas id="scene"></canvas>
+<div id="tooltip"></div>
+
+<div id="overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  ⚙️  CONFIGURATION
+// ═══════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  modelPath: 'room.glb',
+
+  cameraPosition: { x: -3, y: 2, z: 2.5 },
+  cameraTarget:   { x: 0,  y: 1.5, z: 0 },
+
+  mouseStrengthX: 0.15,
+  mouseStrengthY: 0.08,
+
+  objectMap: {
+    'ServerRack':   'projects',
+    'bike':         'hobbies',
+    'bike.001':     'hobbies',
+    'Killa':        'hobbies',
+    'Soccerball':   'hobbies',
+    'Dota':         'hobbies',
+    'certificates': 'career',
+    'cat':          'about',
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  📄  PAGE CONTENT
+// ═══════════════════════════════════════════════════════════════
+
+const PAGES = {
+  projects: {
+    theme: 'theme-blue',
+    tag: '💻 Projects & Portfolio',
+    title: "Things I've Built",
+    html: `
+      <p>From full-stack web apps to Linux configs and custom scripts here's what I've been building.</p>
+      <div class="card-grid">
+        <div class="card"><strong>🗄️ Proxmox Home Server</strong>Built and manage my own home server running Proxmox. Hosts VMs, containers, and more self-hosted services than I probably need.</div>
+        <div class="card"><strong>🌐 My Life</strong>This full-stack web application built with Blender, NginX, React & Node.js about my life and interests.</div>
+        <div class="card"><strong>📊 Grafana Dashboard</strong>Built a full monitoring stack with Prometheus and Grafana, tracking metrics across all my servers and services in real time.</div>
+        <div class="card"><strong>🖥️ Game Servers</strong>Host and manage heavily modded game servers for me and my friends. Custom configs, mod stacks, and the occasional 2am restart when something explodes.</div>
+        <div class="card"><strong>💾 NAS Build</strong>Designed and built a Network attached storage array through TrueNAS. Terrabytes of raw storage feeding into my home lab because you can never have enough space.</div>
+        <div class="card"><strong>🎬 Jellyfin</strong>Cut the streaming subscriptions and built my own media server with Jellyfin. Runs on my home lab and streams to every device in the house.</div>
+      </div>
+      <div class="skill-list">
+        <span class="skill-pill">React</span>
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">Linux</span>
+        <span class="skill-pill">Node.js</span>
+        <span class="skill-pill">Three.js</span>
+        <span class="skill-pill">Blender</span>
+      </div>`
+  },
+  hobbies: {
+    theme: 'theme-orange',
+    tag: '🚲 Hobbies & Interests',
+    title: "Life",
+    html: `
+      <p>When If I'm not at my desk, I'm out on the road cycling through new routes, chasing sunrises, and pretending the hills aren't as steep as they are, but if I am then I'm on discord with Da Bois gaming.</p>
+      <div class="card-grid">
+        <div class="card"><strong>🚴 Road Cycling</strong>Weekend rides, hill climbs, and the occasional century ride.</div>
+        <div class="card"><strong>🎮 Dota 2</strong>Thousands of hours deep and my MMR still says otherwise. I can't quit even if I tried.</div>
+        <div class="card"><strong>⚽ Football</strong>Football has been part of my life since I could walk. Competing through high school pushed me to grow on and off the field.</div>
+        <div class="card"><strong>🗄️ Home Lab</strong>Running my own servers at home, self-hosting services, breaking things, and fixing them at 2am.</div>
+        <div class="card"><strong>💀 Escape from Tarkov</strong>Gearing up, dying to scavs, and somehow going back in for more. The worst game I've ever played and I can't put it down. Nothing beats taking people's stuff.</div>
+        <div class="card"><strong>⚙️ Factorio</strong>Just one more belt. Just one more assembler. Just one more hour. Factorio has taken days of my life and I'd give it more.</div>
+      </div>`
+  },
+  career: {
+    theme: 'theme-teal',
+    tag: '📜 Work & Career',
+    title: "Where I've Been",
+    html: `
+      <p>IT Technician, Network Engineer, and System Admin with a passion for building things that work. <a href="/Michael%20Thaure%20-%20Resume%202026.pdf" target="_blank" style="color: inherit; text-decoration: underline;">View my full resume →</a></p>
+      <div class="card-grid">
+        <div class="card"><strong>🏥 System Support Technician</strong>Cottage Hospital via Tek System: Tier 2 & 3 support for clinical and administrative staff. Oct 2025–Present</div>
+        <div class="card"><strong>💻 IT Technician</strong>Service Objects: Asset management, Windows imaging, help desk support. Mar–Oct 2025</div>
+        <div class="card"><strong>🗄️ Database Developer</strong>CSUCI: Built a healthcare management system with phpMyAdmin, Power BI, HTML & PHP. 2024</div>
+        <div class="card"><strong>⚙️ Systems Administrator</strong>CSUCI: Ansible automation, Prometheus monitoring, Grafana dashboards across VMs. 2024</div>
+        <div class="card"><strong>📱 Electronics Associate</strong>Target: Worked the electronics department helping customers with tech purchases, managing inventory, and becoming the go-to person for anything with a power button. Jun 2018 - Feb 2024</div>
+        <div class="card"><strong>🛠️ Technology Repair Specialist</strong>Drop Smash Fix: Repaired phones, tablets, laptops, and consumer electronics day in and day out. Where I learned that hardware doesn't lie, it just breaks in interesting ways. Jun 2017 - Feb 2019</div>
+      </div>
+      <div class="skill-list">
+        <span class="skill-pill">Linux</span>
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">AWS</span>
+        <span class="skill-pill">Ansible</span>
+        <span class="skill-pill">Proxmox</span>
+        <span class="skill-pill">ServiceNow</span>
+        <span class="skill-pill">MySQL</span>
+        <span class="skill-pill">PowerShell</span>
+        <span class="skill-pill">Active Directory</span>
+        <span class="skill-pill">Grafana</span>
+      </div>`
+  },
+  about: {
+    theme: 'theme-pink',
+    tag: '😺 Kitties',
+    title: "Meet Nala & Bella",
+    html: `
+      <p>Every good home lab needs a supervisor. I have two.</p>
+      <div class="card-grid">
+        <div class="card">
+          <img src="/Bella.png" alt="Bella" style="width:100%; border-radius:12px; margin-bottom:8px;">
+          <strong>Bella</strong>The older one. Judges my code from the top of her cat tree and has never once been impressed.
+        </div>
+        <div class="card">
+          <img src="/Nala.jpeg" alt="Nala" style="width:100%; border-radius:12px; margin-bottom:8px;">
+          <strong>Nala</strong>The chaos agent. Knocks things off desks, sits on keyboards, and somehow always picks the worst time to need attention.
+        </div>
+      </div>`
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  🔧  ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+const cursor   = document.getElementById('cursor');
+const tooltip  = document.getElementById('tooltip');
+const overlay  = document.getElementById('overlay');
+const modalEl  = document.getElementById('modal-content');
+const loading  = document.getElementById('loading');
+const errorMsg = document.getElementById('error-msg');
+const progBar  = document.getElementById('progress-bar');
+const progTxt  = document.getElementById('progress-text');
+
+// Custom cursor
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
+
+// Three.js setup
+const canvas   = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+renderer.outputEncoding    = THREE.sRGBEncoding;
+renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene  = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+scene.fog = new THREE.Fog(0x1a1a2e, 20, 35);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(CONFIG.cameraPosition.x, CONFIG.cameraPosition.y, CONFIG.cameraPosition.z);
+camera.lookAt(CONFIG.cameraTarget.x, CONFIG.cameraTarget.y, CONFIG.cameraTarget.z);
+
+let targetMouseX  = 0, targetMouseY  = 0;
+let currentMouseX = 0, currentMouseY = 0;
+
+const baseCamX = CONFIG.cameraPosition.x;
+const baseCamY = CONFIG.cameraPosition.y;
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffeedd, 0.7));
+const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
+sun.position.set(5, 10, 6);
+sun.castShadow = true;
+sun.shadow.mapSize.width  = 2048;
+sun.shadow.mapSize.height = 2048;
+scene.add(sun);
+const fillLight = new THREE.PointLight(0x4A90D9, 1.2, 14);
+fillLight.position.set(-4, 4, 2);
+scene.add(fillLight);
+const deskLight = new THREE.PointLight(0xFF6B2B, 0.8, 6);
+deskLight.position.set(3, 3, 1);
+scene.add(deskLight);
+
+// ── Load GLB model ──────────────────────────────────────────────
+const clickableMeshes = [];
+const objectRoots = {};
+
+const loader = new THREE.GLTFLoader();
+loader.load(
+  CONFIG.modelPath,
+
+  (gltf) => {
+    const model = gltf.scene;
+
+    model.traverse(node => {
+      if (node.isMesh) {
+        node.castShadow    = true;
+        node.receiveShadow = true;
+        if (node.material && node.material.emissive) {
+          node.userData.origEmissive          = node.material.emissive.clone();
+          node.userData.origEmissiveIntensity = node.material.emissiveIntensity || 0;
+        }
+      }
+
+      const pageKey = CONFIG.objectMap[node.name];
+      if (pageKey) {
+        if (!objectRoots[pageKey]) objectRoots[pageKey] = [];
+        objectRoots[pageKey].push(node);
+      }
+    });
+
+    model.traverse(node => {
+      if (!node.isMesh) return;
+      let ancestor = node;
+      while (ancestor) {
+        const pageKey = CONFIG.objectMap[ancestor.name];
+        if (pageKey) {
+          node.userData.pageKey = pageKey;
+          node.userData.label   = PAGES[pageKey]?.tag || pageKey;
+          clickableMeshes.push(node);
+          break;
+        }
+        ancestor = ancestor.parent;
+      }
+    });
+
+    scene.add(model);
+
+    document.getElementById('splash-progress').style.display = 'none';
+    const enterBtn = document.getElementById('enter-btn');
+    enterBtn.style.display = 'block';
+  },
+
+  (xhr) => {
+    if (xhr.lengthComputable) {
+      const pct = Math.round((xhr.loaded / xhr.total) * 100);
+      progBar.style.width = pct + '%';
+      progTxt.textContent = pct + '%';
+    }
+  },
+
+  (err) => {
+    console.error('GLB load error:', err);
+    errorMsg.style.display = 'block';
+    errorMsg.innerHTML = `
+      ⚠️ Could not load <strong>${CONFIG.modelPath}</strong><br><br>
+      Make sure:<br>
+      1. The file is named <code>room.glb</code><br>
+      2. It's in the same folder as <code>index.html</code><br>
+      3. You're running a local server<br><br>
+      <em>Try: <code>npx serve .</code> in this folder</em>
+    `;
+    progBar.style.background = '#ff4444';
+    progTxt.textContent = 'Error';
+  }
+);
+
+// ── Highlight helpers ───────────────────────────────────────────
+function setHighlight(mesh, on) {
+  if (!mesh) return;
+  const pageKey = mesh.userData.pageKey;
+  if (!pageKey) return;
+
+  const roots = objectRoots[pageKey] || [];
+  roots.forEach(root => {
+    root.traverse(node => {
+      if (!node.isMesh || !node.material || !node.material.emissive) return;
+      if (on) {
+        node.material.emissive.set(0x2ECFB1);
+        node.material.emissiveIntensity = 0.3;
+      } else {
+        node.material.emissive.copy(node.userData.origEmissive || new THREE.Color(0));
+        node.material.emissiveIntensity = node.userData.origEmissiveIntensity || 0;
+      }
+    });
+  });
+}
+
+// ── Raycasting / hover ──────────────────────────────────────────
+const raycaster   = new THREE.Raycaster();
+const mouse       = new THREE.Vector2();
+let   hoveredMesh = null;
+
+document.addEventListener('mousemove', e => {
+  targetMouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+  targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+  mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObjects(clickableMeshes);
+  const hit  = hits.length > 0 ? hits[0].object : null;
+
+  if (hit !== hoveredMesh) {
+    setHighlight(hoveredMesh, false);
+    hoveredMesh = hit;
+    setHighlight(hoveredMesh, true);
+  }
+
+  if (hoveredMesh) {
+    cursor.classList.add('hovering');
+    tooltip.textContent   = hoveredMesh.userData.label;
+    tooltip.style.left    = (e.clientX + 18) + 'px';
+    tooltip.style.top     = (e.clientY - 10) + 'px';
+    tooltip.classList.add('visible');
+  } else {
+    cursor.classList.remove('hovering');
+    tooltip.classList.remove('visible');
+  }
+});
+
+// ── Click → open modal ──────────────────────────────────────────
+document.addEventListener('click', e => {
+  if (!sceneClickable) return;
+  if (!hoveredMesh) return;
+  const page = PAGES[hoveredMesh.userData.pageKey];
+  if (!page) return;
+  modalEl.className = `modal ${page.theme}`;
+  modalEl.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag">${page.tag}</div>
+    <h2>${page.title}</h2>
+    ${page.html}
+  `;
+  overlay.classList.add('open');
+});
+
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+function closeModal() { overlay.classList.remove('open'); }
+
+// ── Enter button ────────────────────────────────────────────────
+let sceneClickable = false;
+
+const enterBtn = document.getElementById('enter-btn');
+enterBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  loading.classList.add('hidden');
+  setTimeout(() => { sceneClickable = true; }, 400);
+});
+
+// ── Render loop ─────────────────────────────────────────────────
+(function animate() {
+  requestAnimationFrame(animate);
+
+  currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+  currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+
+  camera.position.x = baseCamX + currentMouseX * CONFIG.mouseStrengthX;
+  camera.position.y = baseCamY + currentMouseY * -CONFIG.mouseStrengthY;
+
+  camera.lookAt(CONFIG.cameraTarget.x, CONFIG.cameraTarget.y, CONFIG.cameraTarget.z);
+
+  renderer.render(scene, camera);
+})();
+
+// ── Resize ──────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
